@@ -130,7 +130,6 @@
     <div id="ui-layer">
         <div id="counter">0 / 3</div>
         <div id="guide-text">Đưa tay lên trước Camera để bắt đầu</div>
-        <div id="credit-text">tiktok: binnanee</div>
         
         <div id="result-modal">
             <h2>Lời Tiên Tri</h2>
@@ -456,7 +455,7 @@
 
             if (results.multiHandLandmarks && results.multiHandLandmarks.length > 0) {
                 const lm = results.multiHandLandmarks[0];
-                if(storedCards.length === 0) guide.innerText = "Chụm ngón cái và trỏ để chọn";
+                if(storedCards.length === 0) guide.innerText = "Di chuyển sang trái/phải để di chuyển xung quanh trải bài. Chụm ngón cái và trỏ để chọn 1 lá";
                 handX = 1 - lm[9].x; 
                 const x = (lm[8].x + lm[4].x) / 2;
                 const y = (lm[8].y + lm[4].y) / 2;
