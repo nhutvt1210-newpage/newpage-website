@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Tarot AR - Faster Scroll</title>
+    <title>Bốc bài Tarot - Tarot AR</title>
     <style>
         body { margin: 0; overflow: hidden; background-color: #050505; font-family: 'Times New Roman', serif; color: #fff; }
         
@@ -455,7 +455,7 @@
 
             if (results.multiHandLandmarks && results.multiHandLandmarks.length > 0) {
                 const lm = results.multiHandLandmarks[0];
-                if(storedCards.length === 0) guide.innerText = "Di chuyển sang trái/phải để di chuyển xung quanh trải bài. Chụm ngón cái và trỏ để chọn 1 lá";
+                if(storedCards.length === 0) guide.innerText = "Đưa tay sang trái/phải để di chuyển xung quanh trải bài. Chụm ngón cái và trỏ để chọn 1 lá";
                 handX = 1 - lm[9].x; 
                 const x = (lm[8].x + lm[4].x) / 2;
                 const y = (lm[8].y + lm[4].y) / 2;
