@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Kỳ Môn Độn Giáp · newpage</title>
+<meta name="description" content="Lập quẻ Kỳ Môn Độn Giáp thời gia chuyển bàn, định cục Sách bổ hoặc Phù đầu, tính theo giờ Việt Nam. Có luận cách cục kèm nguồn trích sách gốc.">
+<link rel="icon" href="/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600&family=Noto+Serif:wght@400;500&family=Noto+Serif+TC:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #050505;
+    --surface: rgba(255,255,255,0.028);
+    --surface-2: rgba(255,255,255,0.05);
+    --stroke: #1f1f1f;
+    --stroke-2: #2e2e2e;
+    --text: #f5f5f5;
+    --text-2: #a6a6a6;
+    --text-3: #6e6e6e;
+    --accent: #cdb07a;
+    --accent-soft: rgba(205,176,122,0.12);
+    --good: #8cc5a0;
+    --good-soft: rgba(140,197,160,0.1);
+    --bad: #e08c8c;
+    --bad-soft: rgba(224,140,140,0.1);
+    --radius: 14px;
+    --font-ui: "Inter Tight", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+    --font-serif: "Noto Serif", Georgia, "Times New Roman", serif;
+    --font-han: "Noto Serif TC", "Songti TC", "PMingLiU", "MingLiU", serif;
+  }
+  * { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0; background: var(--bg); color: var(--text);
+    font-family: var(--font-ui); font-size: 15px; line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+  body::before {
+    content: ""; position: fixed; inset: 0; pointer-events: none; z-index: -1;
+    background:
+      radial-gradient(900px 500px at 50% -10%, rgba(205,176,122,0.07), transparent 70%),
+      radial-gradient(600px 400px at 100% 100%, rgba(255,255,255,0.03), transparent 70%);
+  }
+  .han { font-family: var(--font-han); }
+  a { color: inherit; }
+  button, input, select { font: inherit; color: inherit; }
+
+  .wrap { max-width: 1080px; margin: 0 auto; padding-inline: 20px; }
+
+  /* Top bar */
+  .topbar {
+    position: sticky; top: 0; z-index: 50;
+    background: rgba(0,0,0,0.72); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--stroke);
+  }
+  .topbar .wrap { display: flex; align-items: center; justify-content: space-between; height: 60px; }
+  .topbar img { height: 22px; display: block; }
+  .topbar .crumb { color: var(--text-2); font-size: 14px; font-weight: 500; }
+
+  /* Hero */
+  .hero { padding-block: 56px 28px; text-align: center; }
+  .eyebrow { color: var(--accent); font-size: 12px; letter-spacing: 0.22em; text-transform: uppercase; font-weight: 500; }
+  .eyebrow .han { letter-spacing: 0.3em; }
+  h1 {
+    font-family: var(--font-serif); font-weight: 400; font-size: clamp(34px, 6vw, 56px);
+    line-height: 1.1; margin: 14px 0 12px; letter-spacing: -0.01em;
+  }
+  .lede { color: var(--text-2); max-width: 580px; margin: 0 auto; font-size: 15.5px; }
+
+  /* Form */
+  .panel {
+    background: var(--surface); border: 1px solid var(--stroke); border-radius: var(--radius);
+    padding: 20px;
+  }
+  form.panel { display: grid; gap: 16px; grid-template-columns: repeat(12, 1fr); align-items: end; }
+  .field { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+  .field label, .field .label { font-size: 12px; color: var(--text-2); font-weight: 500; letter-spacing: 0.02em; }
+  .f-date { grid-column: span 3; } .f-time { grid-column: span 2; } .f-tz { grid-column: span 3; } .f-method { grid-column: span 4; }
+  .f-adv { grid-column: span 8; } .f-actions { grid-column: span 4; display: flex; gap: 10px; justify-content: flex-end; }
+  input[type=date], input[type=time], select {
+    width: 100%; height: 44px; padding: 0 12px; border-radius: 10px;
+    background: #0d0d0d; border: 1px solid var(--stroke-2); outline: none;
+    color-scheme: dark; font-size: 15px;
+  }
+  input:focus-visible, select:focus-visible, button:focus-visible, summary:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  .seg { display: grid; grid-template-columns: 1fr 1fr; background: #0d0d0d; border: 1px solid var(--stroke-2); border-radius: 10px; padding: 3px; height: 44px; }
+  .seg input { position: absolute; opacity: 0; pointer-events: none; }
+  .seg label { display: flex; align-items: center; justify-content: center; gap: 6px; border-radius: 7px; cursor: pointer; color: var(--text-2); font-size: 14px; font-weight: 500; white-space: nowrap; transition: background .15s, color .15s; }
+  .seg label .han { font-size: 13px; color: var(--text-3); }
+  .seg input:checked + label { background: var(--surface-2); color: var(--text); box-shadow: inset 0 0 0 1px var(--stroke-2); }
+  .seg input:checked + label .han { color: var(--accent); }
+  .seg input:focus-visible + label { outline: 2px solid var(--accent); }
+  .adv { font-size: 13px; color: var(--text-2); }
+  .adv summary { cursor: pointer; list-style: none; display: inline-flex; align-items: center; gap: 6px; }
+  .adv summary::-webkit-details-marker { display: none; }
+  .adv summary::before { content: "+"; display: inline-block; width: 12px; color: var(--text-3); }
+  .adv[open] summary::before { content: "−"; }
+  .adv-body { display: flex; flex-wrap: wrap; gap: 16px; margin-top: 12px; }
+  .adv-body .field { width: 240px; max-width: 100%; }
+  .btn {
+    height: 44px; padding: 0 20px; border-radius: 999px; border: 1px solid var(--stroke-2);
+    background: transparent; cursor: pointer; font-weight: 500; font-size: 14.5px; white-space: nowrap;
+    transition: background .15s, color .15s, border-color .15s;
+  }
+  .btn:hover { border-color: #555; }
+  .btn-primary { background: var(--text); color: #000; border-color: var(--text); }
+  .btn-primary:hover { background: #fff; box-shadow: 0 0 24px rgba(255,255,255,0.18); }
+
+  .error { display: none; margin-top: 12px; padding: 12px 14px; border-radius: 10px; background: var(--bad-soft); color: var(--bad); font-size: 14px; }
+  .error.show { display: block; }
+
+  /* Summary */
+  section.block { margin-top: 28px; }
+  .block-head { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 14px; }
+  h2 { font-family: var(--font-serif); font-weight: 400; font-size: 22px; margin: 0; }
+  h2 .han { color: var(--text-3); font-size: 16px; margin-left: 8px; }
+  .muted { color: var(--text-3); font-size: 13px; }
+
+  .pillars { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--stroke); border: 1px solid var(--stroke); border-radius: var(--radius); overflow: hidden; }
+  .pillar { background: var(--bg); padding: 16px 12px; text-align: center; }
+  .pillar .k { font-size: 12px; color: var(--text-3); letter-spacing: 0.08em; text-transform: uppercase; }
+  .pillar .gz { font-family: var(--font-han); font-size: 34px; line-height: 1.2; margin: 6px 0 2px; letter-spacing: 0.06em; }
+  .pillar .vi { font-size: 14px; color: var(--text-2); }
+  .pillar .kv { font-size: 11.5px; color: var(--text-3); margin-top: 4px; }
+
+  .facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 10px; margin-top: 12px; }
+  .fact { background: var(--surface); border: 1px solid var(--stroke); border-radius: 12px; padding: 12px 14px; min-width: 0; }
+  .fact .k { font-size: 12px; color: var(--text-3); }
+  .fact .v { font-size: 16px; margin-top: 2px; }
+  .fact .v .han { color: var(--text-3); font-size: 14px; margin-left: 6px; }
+  .fact.hl { border-color: rgba(205,176,122,0.35); background: var(--accent-soft); }
+  .fact.hl .k { color: var(--accent); }
+
+  .note {
+    margin-top: 12px; font-size: 13px; color: var(--text-2);
+    border-left: 2px solid var(--accent); padding: 6px 0 6px 12px;
+  }
+
+  /* Board */
+  .board { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .palace {
+    position: relative; background: var(--surface); border: 1px solid var(--stroke); border-radius: 12px;
+    padding: 12px 12px 10px; min-height: 176px; display: flex; flex-direction: column; min-width: 0;
+  }
+  .palace.is-fu { border-color: rgba(205,176,122,0.5); box-shadow: inset 0 0 0 1px rgba(205,176,122,0.18); }
+  .palace.is-shi { border-color: rgba(205,176,122,0.5); }
+  .p-head { display: flex; justify-content: space-between; align-items: baseline; gap: 6px; font-size: 12px; color: var(--text-3); }
+  .p-name { color: var(--text-2); font-weight: 500; letter-spacing: 0.04em; }
+  .p-name .han { color: var(--text-3); margin-left: 4px; }
+  .p-body { display: grid; grid-template-columns: 1fr auto; gap: 8px; margin-top: 8px; flex: 1; }
+  .p-lines { display: flex; flex-direction: column; gap: 5px; min-width: 0; }
+  .ln { font-size: 14px; line-height: 1.3; }
+  .ln .han { color: var(--text-3); font-size: 12.5px; margin-left: 5px; }
+  .ln .role { display: block; font-size: 10.5px; color: var(--text-3); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 1px; }
+  .ln.good .vi { color: var(--good); }
+  .ln.bad .vi { color: var(--bad); }
+  .vig { font-size: 11px; color: var(--text-3); border: 1px solid var(--stroke-2); border-radius: 999px; padding: 0 6px; margin-left: 6px; white-space: nowrap; }
+  .stems { display: flex; flex-direction: column; align-items: center; justify-content: flex-start; gap: 2px; padding-left: 8px; border-left: 1px solid var(--stroke); min-width: 44px; }
+  .stem { font-family: var(--font-han); line-height: 1.1; text-align: center; }
+  .stem.sky { font-size: 30px; color: var(--text); }
+  .stem.earth { font-size: 22px; color: var(--text-2); margin-top: 4px; }
+  .stem small { display: block; font-family: var(--font-ui); font-size: 10.5px; color: var(--text-3); margin-top: 1px; }
+  .badges { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 10px; }
+  .bdg { font-size: 11px; padding: 1px 7px; border-radius: 999px; border: 1px solid var(--stroke-2); color: var(--text-2); white-space: nowrap; }
+  .bdg.gold { border-color: rgba(205,176,122,0.45); color: var(--accent); background: var(--accent-soft); }
+  .bdg.void { border-style: dashed; }
+  .palace.center { justify-content: center; align-items: center; text-align: center; background: transparent; border-style: dashed; }
+  .center .big { font-family: var(--font-han); font-size: 40px; line-height: 1; margin: 10px 0 6px; }
+  .center .sub { font-size: 12.5px; color: var(--text-2); }
+
+  .legend { display: flex; flex-wrap: wrap; gap: 6px 18px; margin-top: 12px; font-size: 12.5px; color: var(--text-3); }
+  .legend i { font-style: normal; color: var(--text-2); }
+  .dot { display: inline-block; width: 7px; height: 7px; border-radius: 50%; margin-right: 6px; vertical-align: 1px; }
+
+  /* Patterns */
+  .plist { display: grid; gap: 10px; }
+  .pat { background: var(--surface); border: 1px solid var(--stroke); border-radius: 12px; padding: 14px 16px; }
+  .pat-top { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+  .tag { font-size: 12px; font-weight: 600; padding: 2px 9px; border-radius: 999px; }
+  .tag.good { background: var(--good-soft); color: var(--good); }
+  .tag.bad { background: var(--bad-soft); color: var(--bad); }
+  .tag.neu { background: var(--surface-2); color: var(--text-2); }
+  .pat-title { font-size: 16px; }
+  .pat-title .han { color: var(--text-3); font-size: 14.5px; margin-left: 6px; }
+  .pat-meta { font-size: 13px; color: var(--text-3); margin-left: auto; }
+  .pat-detail { margin-top: 8px; font-size: 14px; color: var(--text-2); }
+  .pat-detail .han { font-size: 14.5px; }
+  .pat-quote { font-family: var(--font-han); font-size: 15px; color: var(--text); margin-top: 6px; }
+  .pat-extra { margin-top: 8px; font-size: 12.5px; color: var(--text-3); }
+  .src { margin-top: 8px; font-size: 13px; }
+  .src summary { cursor: pointer; color: var(--text-3); }
+  .src ol { margin: 8px 0 0; padding-left: 18px; color: var(--text-2); }
+  .src li { margin-bottom: 8px; }
+  .src .cite { color: var(--text-2); }
+  .src blockquote { margin: 4px 0 0; font-family: var(--font-han); color: var(--text-2); font-size: 13.5px; line-height: 1.7; }
+
+  .kyrow { display: grid; grid-template-columns: 92px 88px 1fr; gap: 12px; align-items: start; padding: 12px 0; border-top: 1px solid var(--stroke); }
+  .kyrow:first-child { border-top: 0; }
+  .ky-pal { font-size: 13px; color: var(--text-2); }
+  .ky-pal .han { color: var(--text-3); margin-left: 4px; }
+  .ky-gan { font-family: var(--font-han); font-size: 18px; }
+  .ky-gan small { display: block; font-family: var(--font-ui); font-size: 11.5px; color: var(--text-3); }
+  .ky-body .pat-title { font-size: 15px; }
+
+  /* Method */
+  .method { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 10px; }
+  .method .fact .v { font-size: 14px; color: var(--text-2); }
+  footer { margin-top: 48px; padding-block: 28px 40px; border-top: 1px solid var(--stroke); color: var(--text-3); font-size: 13px; }
+  footer p { margin: 0 0 8px; }
+
+  .toast { position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%) translateY(20px); opacity: 0; background: var(--text); color: #000; padding: 8px 16px; border-radius: 999px; font-size: 14px; font-weight: 500; transition: .25s; pointer-events: none; z-index: 60; }
+  .toast.show { opacity: 1; transform: translateX(-50%); }
+
+  @media (max-width: 860px) {
+    .f-date, .f-time, .f-tz { grid-column: span 4; }
+    .f-method { grid-column: span 12; }
+    .f-adv { grid-column: span 12; }
+    .f-actions { grid-column: span 12; justify-content: stretch; }
+    .f-actions .btn { flex: 1; }
+  }
+  @media (max-width: 600px) {
+    .wrap { padding-inline: 16px; }
+    .hero { padding-block: 36px 20px; }
+    form.panel { padding: 16px; gap: 14px; }
+    .f-date { grid-column: span 7; } .f-time { grid-column: span 5; } .f-tz { grid-column: span 12; }
+    .pillars { grid-template-columns: repeat(2, 1fr); }
+    .pillar .gz { font-size: 30px; }
+    .board { gap: 5px; }
+    .palace { padding: 8px 7px 8px; min-height: 0; border-radius: 10px; }
+    .p-head { flex-direction: column; gap: 0; font-size: 10.5px; }
+    .p-body { grid-template-columns: 1fr; gap: 6px; }
+    .stems { flex-direction: row; justify-content: flex-start; align-items: baseline; gap: 10px; border-left: 0; border-bottom: 1px solid var(--stroke); padding: 0 0 6px; order: -1; min-width: 0; }
+    .stem.sky { font-size: 24px; } .stem.earth { font-size: 18px; margin-top: 0; }
+    .ln { font-size: 12px; }
+    .ln .han { display: block; margin-left: 0; font-size: 11px; }
+    .ln .role { display: none; }
+    .vig { display: inline-block; margin: 2px 0 0; font-size: 10px; }
+    .badges { margin-top: 6px; }
+    .bdg { font-size: 10px; padding: 0 5px; }
+    .center .big { font-size: 30px; }
+    .kyrow { grid-template-columns: 1fr 1fr; }
+    .ky-body { grid-column: 1 / -1; }
+    .pat-meta { margin-left: 0; width: 100%; }
+  }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="wrap">
+    <a href="/" aria-label="newpage — trang chủ"><img src="/assets/logo-newpage.svg" alt="newpage"></a>
+    <span class="crumb">Kỳ Môn Độn Giáp</span>
+  </div>
+</header>
+
+<main class="wrap">
+  <section class="hero">
+    <div class="eyebrow"><span class="han">奇門遁甲</span> · Thời gia chuyển bàn</div>
+    <h1>Kỳ Môn Độn Giáp</h1>
+    <p class="lede">Lập quẻ theo giờ, tính theo giờ Việt Nam. Mỗi cách cục đều ghi nguồn trích từ sách gốc. Khi các sách nói khác nhau, trang liệt kê đủ các cách hiểu, không tự chọn một.</p>
+  </section>
+
+  <form class="panel" id="form" autocomplete="off" novalidate>
+    <div class="field f-date">
+      <label for="date">Ngày (dương lịch)</label>
+      <input type="date" id="date" min="1901-01-01" max="2099-12-31" required>
+    </div>
+    <div class="field f-time">
+      <label for="time">Giờ</label>
+      <input type="time" id="time" required>
+    </div>
+    <div class="field f-tz">
+      <label for="tz">Múi giờ</label>
+      <select id="tz">
+        <option value="7" selected>UTC+7 · Việt Nam</option>
+        <option value="8">UTC+8 · Trung Quốc, Đài Loan, Singapore</option>
+        <option value="9">UTC+9 · Nhật Bản, Hàn Quốc</option>
+        <option value="10">UTC+10 · Sydney (giờ chuẩn)</option>
+        <option value="5.5">UTC+5:30 · Ấn Độ</option>
+        <option value="1">UTC+1 · Trung Âu (giờ chuẩn)</option>
+        <option value="0">UTC+0 · London (giờ chuẩn)</option>
+        <option value="-5">UTC−5 · New York (giờ chuẩn)</option>
+        <option value="-8">UTC−8 · California (giờ chuẩn)</option>
+      </select>
+    </div>
+    <div class="field f-method" role="radiogroup" aria-labelledby="method-lbl">
+      <span class="label" id="method-lbl">Phương pháp định cục</span>
+      <div class="seg">
+        <input type="radio" name="method" id="m-cb" value="拆補" checked><label for="m-cb">Sách bổ <span class="han">拆補</span></label>
+        <input type="radio" name="method" id="m-ft" value="符頭"><label for="m-ft">Phù đầu <span class="han">符頭</span></label>
+      </div>
+    </div>
+    <details class="adv f-adv">
+      <summary>Tùy chọn nâng cao</summary>
+      <div class="adv-body">
+        <div class="field">
+          <label for="yuan">Cách xác định nguyên (Sách bổ)</label>
+          <select id="yuan">
+            <option value="futou" selected>Theo phù đầu của ngày (phổ biến)</option>
+            <option value="days">Đếm 5 ngày từ lúc giao tiết</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="gods">Bát thần khi Dương độn</label>
+          <select id="gods">
+            <option value="classic" selected>Câu Trần, Chu Tước (cổ thư)</option>
+            <option value="modern">Bạch Hổ, Huyền Vũ (phổ biến hiện nay)</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="zi">Giờ Tý đêm (23:00–24:00)</label>
+          <select id="zi">
+            <option value="次日" selected>Tính sang ngày hôm sau</option>
+            <option value="當日">Vẫn tính là ngày hôm nay</option>
+          </select>
+        </div>
+      </div>
+    </details>
+    <div class="f-actions">
+      <button type="button" class="btn" id="btn-now">Giờ hiện tại</button>
+      <button type="submit" class="btn btn-primary">Lập quẻ</button>
+    </div>
+  </form>
+  <div class="error" id="error" role="alert"></div>
+
+  <div id="result" hidden>
+    <section class="block" aria-labelledby="h-summary">
+      <div class="block-head">
+        <h2 id="h-summary">Tổng quan quẻ<span class="han">盤局</span></h2>
+        <button type="button" class="btn" id="btn-share" style="height:36px;padding:0 14px;font-size:13px">Sao chép link quẻ</button>
+      </div>
+      <div class="pillars" id="pillars"></div>
+      <div class="facts" id="facts"></div>
+      <div class="note" id="tz-note" hidden></div>
+    </section>
+
+    <section class="block" aria-labelledby="h-board">
+      <div class="block-head">
+        <h2 id="h-board">Cửu cung<span class="han">九宮</span></h2>
+        <span class="muted">Hướng Nam ở trên, theo cách bày truyền thống</span>
+      </div>
+      <div class="board" id="board"></div>
+      <div class="legend">
+        <span>Mỗi cung: <i>Bát thần</i> · <i>Cửu tinh</i> · <i>Bát môn</i> · Can <i>thiên bàn</i> (lớn) / <i>địa bàn</i> (nhỏ)</span>
+        <span><span class="dot" style="background:var(--good)"></span>Cát môn / cát tinh</span>
+        <span><span class="dot" style="background:var(--bad)"></span>Hung môn / hung tinh</span>
+      </div>
+    </section>
+
+    <section class="block" aria-labelledby="h-pat">
+      <div class="block-head">
+        <h2 id="h-pat">Cách cục<span class="han">格局</span></h2>
+        <span class="muted" id="pat-count"></span>
+      </div>
+      <div class="plist" id="patterns"></div>
+    </section>
+
+    <section class="block" aria-labelledby="h-ky">
+      <div class="block-head">
+        <h2 id="h-ky">Thập can khắc ứng<span class="han">十干克應</span></h2>
+        <span class="muted">Can thiên bàn gia lên can địa bàn, xét từng cung</span>
+      </div>
+      <div class="panel" id="keying" style="padding:4px 16px"></div>
+      <p class="muted" style="margin-top:10px">Nhãn Cát/Hung do engine suy ra từ lời luận, bốn bộ sách gốc không ghi nhãn này. Đọc lời luận nguyên văn là chính.</p>
+    </section>
+
+    <section class="block" aria-labelledby="h-method">
+      <div class="block-head"><h2 id="h-method">Cách tính</h2></div>
+      <div class="method" id="method"></div>
+    </section>
+  </div>
+
+  <footer>
+    <p>Engine: <a href="https://github.com/arc119226/qimen_dunjia" target="_blank" rel="noopener">qimen-dunjia</a> v3.1.0 (MIT) · Lịch: <a href="https://github.com/6tail/lunar-javascript" target="_blank" rel="noopener">lunar-javascript</a> (MIT) · <a href="/qimen/vendor/THIRD-PARTY-LICENSES.txt">Giấy phép</a></p>
+    <p>Công cụ này chỉ để tham khảo, tìm hiểu văn hóa, không thay thế tư vấn chuyên môn.</p>
+    <p>© newpage</p>
+  </footer>
+</main>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script src="/qimen/vendor/qimen.standalone.min.js"></script>
+<script>
+(function () {
+  'use strict';
+  var Q = window.Qimen;
+
+  /* ---------- Hán → Việt ---------- */
+  var HV = {
+    '甲':'Giáp','乙':'Ất','丙':'Bính','丁':'Đinh','戊':'Mậu','己':'Kỷ','庚':'Canh','辛':'Tân','壬':'Nhâm','癸':'Quý',
+    '子':'Tý','丑':'Sửu','寅':'Dần','卯':'Mão','辰':'Thìn','巳':'Tỵ','午':'Ngọ','未':'Mùi','申':'Thân','酉':'Dậu','戌':'Tuất','亥':'Hợi',
+    '三':'tam','不':'bất','並':'tịnh','之':'chi','乾':'càn','事':'sự','互':'hỗ','五':'ngũ','亭':'đình','人':'nhân','伏':'phục','佐':'tá','使':'sử',
+    '值':'trực','傷':'thương','儀':'nghi','光':'quang','入':'nhập','六':'lục','凶':'hung','出':'xuất','刑':'hình','利':'lợi','力':'lực','勾':'câu',
+    '化':'hóa','反':'phản','合':'hợp','同':'đồng','吟':'ngâm','和':'hòa','四':'tứ','困':'khốn','地':'địa','墓':'mộ','大':'đại','天':'thiên','太':'thái',
+    '夭':'yêu','奇':'kỳ','女':'nữ','奸':'gian','孛':'bột','宮':'cung','害':'hại','小':'tiểu','就':'tựu','師':'sư','干':'can','年':'niên','幼':'ấu',
+    '庭':'đình','張':'trương','得':'đắc','成':'thành','戶':'hộ','投':'đầu','折':'chiết','擊':'kích','擒':'cầm','日':'nhật','明':'minh','星':'tinh',
+    '時':'thời','會':'hội','月':'nguyệt','朱':'chu','格':'cách','武':'vũ','水':'thủy','江':'giang','淫':'dâm','游':'du','火':'hỏa','熒':'huỳnh',
+    '牢':'lao','犬':'khuyển','狂':'cuồng','猖':'xương','獄':'ngục','玄':'huyền','生':'sinh','白':'bạch','相':'tương','矯':'kiểu','神':'thần',
+    '穴':'huyệt','符':'phù','網':'võng','纏':'triền','羅':'la','義':'nghĩa','耀':'diệu','自':'tự','華':'hoa','蓋':'cái','蓬':'bồng','虎':'hổ',
+    '蛇':'xà','螣':'đằng','騰':'đằng','行':'hành','被':'bị','複':'phục','見':'kiến','謀':'mưu','貴':'quý','走':'tẩu','足':'túc','跌':'điệt',
+    '轉':'chuyển','返':'phản','迫':'bách','逃':'đào','逢':'phùng','遁':'độn','遇':'ngộ','門':'môn','陰':'âm','陳':'trần','陽':'dương','隨':'tùy',
+    '雀':'tước','霧':'vụ','靈':'linh','青':'thanh','順':'thuận','飛':'phi','首':'thủ','高':'cao','鬼':'quỷ','魂':'hồn','鳥':'điểu','龍':'long',
+    '九':'cửu','八':'bát','一':'nhất','二':'nhị','七':'thất','乙奇':'Ất kỳ'
+  };
+  function cap(w) { return w.charAt(0).toUpperCase() + w.slice(1); }
+  function hv(s) {
+    if (!s) return '';
+    var out = [], ok = true;
+    for (var i = 0; i < s.length; i++) { var w = HV[s[i]]; if (!w) { ok = false; break; } out.push(cap(w)); }
+    return ok ? out.join(' ') : '';
+  }
+  var PALACES = ['巽','離','坤','震','中','兌','艮','坎','乾'];
+  var PAL = {
+    '巽':{vi:'Tốn',n:4,dir:'Đông Nam'}, '離':{vi:'Ly',n:9,dir:'Nam'}, '坤':{vi:'Khôn',n:2,dir:'Tây Nam'},
+    '震':{vi:'Chấn',n:3,dir:'Đông'}, '中':{vi:'Trung',n:5,dir:'Trung tâm'}, '兌':{vi:'Đoài',n:7,dir:'Tây'},
+    '艮':{vi:'Cấn',n:8,dir:'Đông Bắc'}, '坎':{vi:'Khảm',n:1,dir:'Bắc'}, '乾':{vi:'Càn',n:6,dir:'Tây Bắc'}
+  };
+  var STAR = {
+    '天蓬':['Thiên Bồng','bad'],'天芮':['Thiên Nhuế','bad'],'天沖':['Thiên Xung','good'],'天輔':['Thiên Phụ','good'],'天禽':['Thiên Cầm','good'],
+    '天心':['Thiên Tâm','good'],'天柱':['Thiên Trụ','bad'],'天任':['Thiên Nhậm','good'],'天英':['Thiên Anh','bad']
+  };
+  var DOOR = {
+    '休門':['Hưu môn','good'],'生門':['Sinh môn','good'],'開門':['Khai môn','good'],'傷門':['Thương môn','bad'],
+    '死門':['Tử môn','bad'],'驚門':['Kinh môn','bad'],'杜門':['Đỗ môn',''],'景門':['Cảnh môn','']
+  };
+  var GOD = {
+    '值符':'Trực Phù','騰蛇':'Đằng Xà','螣蛇':'Đằng Xà','太陰':'Thái Âm','六合':'Lục Hợp','白虎':'Bạch Hổ','勾陳':'Câu Trần',
+    '玄武':'Huyền Vũ','朱雀':'Chu Tước','九地':'Cửu Địa','九天':'Cửu Thiên'
+  };
+  var JQ = {
+    '冬至':'Đông Chí','小寒':'Tiểu Hàn','大寒':'Đại Hàn','立春':'Lập Xuân','雨水':'Vũ Thủy','驚蟄':'Kinh Trập','惊蛰':'Kinh Trập','春分':'Xuân Phân',
+    '清明':'Thanh Minh','穀雨':'Cốc Vũ','谷雨':'Cốc Vũ','立夏':'Lập Hạ','小滿':'Tiểu Mãn','小满':'Tiểu Mãn','芒種':'Mang Chủng','芒种':'Mang Chủng',
+    '夏至':'Hạ Chí','小暑':'Tiểu Thử','大暑':'Đại Thử','立秋':'Lập Thu','處暑':'Xử Thử','处暑':'Xử Thử','白露':'Bạch Lộ','秋分':'Thu Phân',
+    '寒露':'Hàn Lộ','霜降':'Sương Giáng','立冬':'Lập Đông','小雪':'Tiểu Tuyết','大雪':'Đại Tuyết'
+  };
+  var YUAN = { '上元':'Thượng nguyên','中元':'Trung nguyên','下元':'Hạ nguyên' };
+  var VIGOR = { '旺':'Vượng','相':'Tướng','休':'Hưu','囚':'Tù','死':'Tử','廢':'Phế','胎':'Thai','沐':'Mộc dục','絕':'Tuyệt','生':'Sinh' };
+  var BRANCH_PALACE = { '子':'坎','丑':'艮','寅':'艮','卯':'震','辰':'巽','巳':'巽','午':'離','未':'坤','申':'坤','酉':'兌','戌':'乾','亥':'乾' };
+  var HORSE = { '申':'寅','子':'寅','辰':'寅','寅':'申','午':'申','戌':'申','巳':'亥','酉':'亥','丑':'亥','亥':'巳','卯':'巳','未':'巳' };
+  var STEMS = '甲乙丙丁戊己庚辛壬癸', BRANCHES = '子丑寅卯辰巳午未申酉戌亥';
+
+  function gzVi(gz) { return gz ? (HV[gz[0]] || '') + ' ' + (HV[gz[1]] || '') : ''; }
+  function xunVoid(gz) {
+    var s = STEMS.indexOf(gz[0]), b = BRANCHES.indexOf(gz[1]);
+    var start = ((b - s) % 12 + 12) % 12; // branch of 甲 in this xun
+    return [BRANCHES[(start + 10) % 12], BRANCHES[(start + 11) % 12]];
+  }
+  function esc(s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return { '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;' }[c]; }); }
+  function palLabel(p) { var x = PAL[p]; return x ? x.vi + ' ' + x.n : p; }
+
+  /* ---------- Time handling ---------- */
+  function pad(n) { return String(n).padStart(2, '0'); }
+  function engineStr(d) { return d.getUTCFullYear() + pad(d.getUTCMonth() + 1) + pad(d.getUTCDate()) + pad(d.getUTCHours()); }
+  function nowIn(tz) { return new Date(Date.now() + tz * 3600e3); }
+
+  var STEMS_ = '甲乙丙丁戊己庚辛壬癸', BR_ = '子丑寅卯辰巳午未申酉戌亥';
+  function idx60(gz) { var s = STEMS_.indexOf(gz[0]), b = BR_.indexOf(gz[1]); for (var n = 0; n < 60; n++) if (n % 10 === s && n % 12 === b) return n; return -1; }
+  function futouOf(dayGz) { var f = idx60(dayGz); f = f - f % 5; return STEMS_[f % 10] + BR_[f % 12]; }
+  function yuanOfFutou(ft) { var b = ft[1]; return '子午卯酉'.indexOf(b) >= 0 ? 0 : '寅申巳亥'.indexOf(b) >= 0 ? 1 : 2; }
+
+  // Decide dun/ju for one pair of runs (local-clock run + absolute-instant run).
+  function decide(local, inst, rule) {
+    if (rule === 'futou') {           // Sách bổ phổ thông: tiết khí theo thời điểm, nguyên theo phù đầu của ngày (giờ địa phương)
+      var ft = futouOf(local.日柱), y = yuanOfFutou(ft), cfg = Q.JIEQI_JUSHU[inst.節氣];
+      return { 節氣: inst.節氣, 陰陽: cfg.yang ? '陽' : '陰', 局數: cfg.ju[y], 三元: Q.YUAN_NAMES[y], 定局法: '拆補', 日符頭: ft };
+    }
+    if (rule === 'days') {            // Engine gốc: 5 ngày một nguyên tính từ thời điểm giao tiết
+      return { 節氣: inst.節氣, 陰陽: inst.陰陽, 局數: inst.局數, 三元: inst.三元, 定局法: '拆補', 節後天數: inst.節後天數 };
+    }
+    // 符頭 (siêu thần tiếp khí): theo lịch ngày địa phương
+    var r = { 節氣: local.節氣, 陰陽: local.陰陽, 局數: local.局數, 三元: local.三元, 定局法: '符頭' };
+    ['上元符頭','符頭','超接','超接天數','閏局'].forEach(function (k) { if (k in local) r[k] = local[k]; });
+    return r;
+  }
+
+  function compute(dateStr, timeStr, tz, method, zi, yuanRule) {
+    var dp = dateStr.split('-').map(Number), tp = timeStr.split(':').map(Number);
+    if (dp.length !== 3 || tp.length < 2 || dp.some(isNaN) || tp.some(isNaN)) throw new Error('Ngày giờ chưa hợp lệ.');
+    if (dp[0] < 1901 || dp[0] > 2099) throw new Error('Chỉ hỗ trợ năm 1901–2099.');
+    var localWall = new Date(Date.UTC(dp[0], dp[1] - 1, dp[2], tp[0], tp[1]));
+    if (localWall.getUTCDate() !== dp[2]) throw new Error('Ngày không tồn tại.');
+    // Engine coi giờ nhập là đồng hồ UTC+8. Cùng thời điểm tuyệt đối, quy về UTC+8:
+    var instWall = new Date(localWall.getTime() + (8 - tz) * 3600e3);
+    var engMethod = method === '符頭' ? '符頭' : '拆補';
+    var opts = { 定局法: engMethod, 夜子時: zi };
+    var rule = method === '符頭' ? 'fu' : yuanRule;
+
+    var local = Q.chartToObject(Q.generateChartByDatetime(engineStr(localWall), opts));
+    var inst = Q.chartToObject(Q.generateChartByDatetime(engineStr(instWall), opts));
+
+    // Trụ ngày, trụ giờ theo đồng hồ địa phương; trụ năm, trụ tháng (đổi theo tiết) theo thời điểm tuyệt đối.
+    var d = decide(local, inst, rule);
+    var o = Q.chartToObject(Q.generateQimenChart({
+      年柱: inst.年柱, 月柱: inst.月柱, 日柱: local.日柱, 時柱: local.時柱, 局數: d.局數, 陰陽: d.陰陽
+    }));
+    Object.keys(d).forEach(function (k) { o[k] = d[k]; });
+    ['夜子時','落於夜子時'].forEach(function (k) { if (k in local) o[k] = local[k]; });
+
+    // Nếu nhập thẳng giờ địa phương vào engine (không xử lý múi giờ) thì ra cục gì?
+    var naive = decide(local, local, rule);
+    var adjusted = tz !== 8 && (naive.局數 !== d.局數 || naive.陰陽 !== d.陰陽 || local.月柱 !== inst.月柱 || local.年柱 !== inst.年柱);
+    return { o: o, adjusted: adjusted, naive: naive, rule: rule };
+  }
+
+  /* ---------- Render ---------- */
+  var $ = function (id) { return document.getElementById(id); };
+
+  function render(res, input) {
+    var o = res.o;
+    $('yuan').disabled = input.m === '符頭';
+    var hourVoid = xunVoid(o.時柱), dayVoid = xunVoid(o.日柱);
+    var voidPal = {}; hourVoid.forEach(function (b) { voidPal[BRANCH_PALACE[b]] = (voidPal[BRANCH_PALACE[b]] || '') + b; });
+    var horse = HORSE[o.時柱[1]], horsePal = BRANCH_PALACE[horse];
+
+    // Pillars
+    var P = [['Năm','年柱'],['Tháng','月柱'],['Ngày','日柱'],['Giờ','時柱']];
+    $('pillars').innerHTML = P.map(function (p) {
+      var gz = o[p[1]], v = xunVoid(gz);
+      return '<div class="pillar"><div class="k">' + p[0] + '</div><div class="gz">' + esc(gz) + '</div>' +
+        '<div class="vi">' + gzVi(gz) + '</div><div class="kv">Không vong: ' + HV[v[0]] + ' ' + HV[v[1]] + '</div></div>';
+    }).join('');
+
+    // Facts
+    var dun = (o.陰陽 === '陰' ? 'Âm' : 'Dương') + ' độn ' + o.局數 + ' cục';
+    var star = STAR[o.值符] || [o.值符], door = DOOR[o.值使] || [o.值使];
+    var facts = [
+      ['Tiết khí', (JQ[o.節氣] || '') , o.節氣],
+      ['Tam nguyên', YUAN[o.三元] || '', o.三元],
+      ['Cục', dun, (o.陰陽 === '陰' ? '陰遁' : '陽遁') + o.局數 + '局', true],
+      ['Tuần thủ (giờ)', gzVi(o.旬首) + ' · ẩn ' + (HV[o.符首] || ''), o.旬首 + o.符首],
+      ['Trực phù', star[0] + ' → ' + palLabel(o.值符落宮), o.值符, true],
+      ['Trực sử', door[0] + ' → ' + palLabel(o.值使落宮), o.值使, true],
+      ['Dịch mã (giờ)', HV[horse] + ' · ' + palLabel(horsePal), horse + '馬']
+    ];
+    if (o.日符頭) facts.push(['Phù đầu ngày', gzVi(o.日符頭), o.日符頭]);
+    if (o.定局法 === '符頭' && o.符頭) facts.push(['Phù đầu', gzVi(o.符頭) + (o.閏局 ? ' · nhuận cục' : '') + (o.超接 ? ' · ' + o.超接 + ' ' + (o.超接天數 || 0) + ' ngày' : ''), o.符頭]);
+    $('facts').innerHTML = facts.map(function (f) {
+      return '<div class="fact' + (f[3] ? ' hl' : '') + '"><div class="k">' + f[0] + '</div><div class="v">' + esc(f[1]) +
+        (f[2] ? '<span class="han">' + esc(f[2]) + '</span>' : '') + '</div></div>';
+    }).join('');
+
+    var note = $('tz-note');
+    if (res.adjusted) {
+      note.hidden = false;
+      note.innerHTML = 'Giờ này nằm sát mốc tiết khí/nguyên, nên đã hiệu chỉnh múi giờ: trụ năm, trụ tháng và cục số tính theo thời điểm tuyệt đối. ' +
+        'Nếu nhập thẳng giờ địa phương vào engine (vốn mặc định UTC+8) sẽ ra <span class="han">' + esc(res.naive.陰陽) + '遁' + res.naive.局數 + '局</span>' + (res.naive.局數 === o.局數 && res.naive.陰陽 === o.陰陽 ? ', lệch trụ năm/tháng.' : ', sai cục.');
+    } else { note.hidden = true; }
+
+    // Board
+    var vig = {}; try { (Q.assessVigor(o).八門 || []).forEach(function (d) { vig[d.宮] = d.狀態; }); } catch (e) {}
+    $('board').innerHTML = PALACES.map(function (p, i) {
+      var info = PAL[p];
+      if (p === '中') {
+        return '<div class="palace center" aria-label="Trung cung"><div class="p-name">Trung 5 <span class="han">中</span></div>' +
+          '<div class="big">' + esc(o.地盤[4]) + '</div><div class="sub">Địa bàn ' + HV[o.地盤[4]] + '</div>' +
+          '<div class="sub" style="margin-top:6px">Thiên Cầm <span class="han">天禽</span> ký ' + palLabel(o.天禽落宮) + '</div></div>';
+      }
+      var g = o.八神[i], s = o.九星[i];
+      if (input.gods === 'modern') g = g === '勾陳' ? '白虎' : g === '朱雀' ? '玄武' : g;
+      var d = o.天門[i], sky = o.天盤[i], earth = o.地盤[i];
+      var st = STAR[s] || [s, ''], dr = DOOR[d] || [d, ''];
+      var badges = [];
+      if (o.值符落宮 === p) badges.push('<span class="bdg gold">Trực phù</span>');
+      if (o.值使落宮 === p) badges.push('<span class="bdg gold">Trực sử</span>');
+      if (voidPal[p]) badges.push('<span class="bdg void">Không vong</span>');
+      if (horsePal === p) badges.push('<span class="bdg">Mã</span>');
+      if (o.中宮寄干 && o.中宮寄干.落宮 === p) badges.push('<span class="bdg">Ký ' + HV[o.中宮寄干.干] + '</span>');
+      var cls = 'palace' + (o.值符落宮 === p ? ' is-fu' : '') + (o.值使落宮 === p ? ' is-shi' : '');
+      var v = vig[p];
+      return '<div class="' + cls + '" aria-label="Cung ' + info.vi + ' ' + info.n + '">' +
+        '<div class="p-head"><span class="p-name">' + info.vi + ' ' + info.n + '<span class="han">' + p + '</span></span><span>' + info.dir + '</span></div>' +
+        '<div class="p-body"><div class="p-lines">' +
+          '<div class="ln"><span class="role">Thần</span><span class="vi">' + esc(GOD[g] || g) + '</span><span class="han">' + esc(g) + '</span></div>' +
+          '<div class="ln ' + st[1] + '"><span class="role">Tinh</span><span class="vi">' + esc(st[0]) + '</span><span class="han">' + esc(s) + '</span></div>' +
+          '<div class="ln ' + dr[1] + '"><span class="role">Môn</span><span class="vi">' + esc(dr[0]) + '</span><span class="han">' + esc(d) + '</span>' +
+            (v ? '<span class="vig" title="Trạng thái vượng suy của môn">' + esc(VIGOR[v] || v) + '</span>' : '') + '</div>' +
+        '</div><div class="stems">' +
+          '<div class="stem sky" title="Thiên bàn">' + esc(sky) + '<small>' + (HV[sky] || '') + '</small></div>' +
+          '<div class="stem earth" title="Địa bàn">' + esc(earth) + '<small>' + (HV[earth] || '') + '</small></div>' +
+        '</div></div>' +
+        (badges.length ? '<div class="badges">' + badges.join('') + '</div>' : '') +
+      '</div>';
+    }).join('');
+
+    // Patterns
+    var pats = []; try { pats = Q.detectPatterns(o); } catch (e) { console.error(e); }
+    var main = pats.filter(function (p) { return p.類 !== '十干克應'; });
+    var ky = pats.filter(function (p) { return p.類 === '十干克應'; });
+    main.sort(function (a, b) { return (a.宮 ? 1 : 0) - (b.宮 ? 1 : 0); });
+    $('pat-count').textContent = main.length ? main.length + ' cách cục' : '';
+    $('patterns').innerHTML = main.length ? main.map(patCard).join('') :
+      '<div class="pat"><span class="muted">Không có cách cục đặc biệt nào (Phục ngâm, Phản ngâm, Môn bách, Tam kỳ…) xuất hiện trong quẻ này.</span></div>';
+
+    ky.sort(function (a, b) { return PALACES.indexOf(a.宮) - PALACES.indexOf(b.宮); });
+    $('keying').innerHTML = ky.map(function (p) {
+      var m = /天盤(.)加地盤(.)/.exec(p.細節 || '') || [];
+      return '<div class="kyrow"><div class="ky-pal">' + palLabel(p.宮) + '<span class="han">' + esc(p.宮) + '</span></div>' +
+        '<div class="ky-gan">' + esc((m[1] || '') + '＋' + (m[2] || '')) + '<small>' + (HV[m[1]] || '') + ' gia ' + (HV[m[2]] || '') + '</small></div>' +
+        '<div class="ky-body"><div class="pat-top">' + tag(p.吉凶) + '<span class="pat-title">' + esc(hv(p.格) || p.格) + '<span class="han">' + esc(p.格) + '</span></span></div>' +
+        (p.斷語 ? '<div class="pat-quote">' + esc(p.斷語) + '</div>' : '') + srcList(p) + '</div></div>';
+    }).join('');
+
+    // Method
+    var tzLbl = $('tz').options[$('tz').selectedIndex].text;
+    var method = [
+      ['Kiểu bàn', 'Chuyển bàn (<span class="han">轉盤</span>), lập quẻ theo giờ (thời gia). Trực sử đi theo số cung Lạc Thư, gặp cung 5 thì ký Khôn'],
+      ['Định cục', res.rule === 'fu' ? 'Phù đầu (<span class="han">符頭</span>): lấy ngày Giáp/Kỷ làm phù đầu, có siêu thần/tiếp khí, đặt nhuận ở Mang Chủng và Đại Tuyết' :
+        res.rule === 'days' ? 'Sách bổ, biến thể của engine gốc: đếm từ đúng thời điểm giao tiết, cứ 5 ngày là một nguyên' + (o.節後天數 != null ? ' · quẻ này rơi vào ngày thứ ' + (o.節後天數 + 1) + ' sau khi giao tiết' : '') :
+        'Sách bổ (<span class="han">拆補</span>): gặp tiết là đổi cục, nguyên xác định theo phù đầu của ngày. Giáp Tý, Giáp Ngọ, Kỷ Mão, Kỷ Dậu là Thượng nguyên; Giáp Dần, Giáp Thân, Kỷ Tỵ, Kỷ Hợi là Trung nguyên; còn lại là Hạ nguyên'],
+      ['Tiết khí', 'Định khí theo lịch Thời Hiến (<span class="han">時憲曆</span>), tính theo vị trí thực của mặt trời'],
+      ['Múi giờ', esc(tzLbl) + '. Trụ ngày và trụ giờ theo đồng hồ địa phương; trụ năm, trụ tháng và cục số theo thời điểm tuyệt đối'],
+      ['Chưa hiệu chỉnh', 'Giờ mặt trời thật, kinh độ nơi sinh, giờ mùa hè. Engine chỉ tính theo giờ tròn, không xét phút, nên nếu giờ lập quẻ cách lúc giao tiết dưới 1 tiếng thì cần kiểm tra lại']
+    ];
+    $('method').innerHTML = method.map(function (m) { return '<div class="fact"><div class="k">' + m[0] + '</div><div class="v">' + m[1] + '</div></div>'; }).join('');
+
+    $('result').hidden = false;
+  }
+
+  function tag(t) {
+    var c = t === '吉' ? 'good' : t === '凶' ? 'bad' : 'neu';
+    var l = t === '吉' ? 'Cát' : t === '凶' ? 'Hung' : 'Bình';
+    return '<span class="tag ' + c + '">' + esc(l) + '</span>';
+  }
+  function srcList(p) {
+    if (!p.出處 || !p.出處.length) return '';
+    return '<details class="src"><summary>Xuất xứ (' + p.出處.length + ')</summary><ol>' + p.出處.map(function (s) {
+      return '<li><span class="cite han">《' + esc(s.書) + '》' + esc(s.篇 || '') + '</span>' +
+        (s.文 ? '<blockquote>' + esc(s.文) + '</blockquote>' : '') + (s.按 ? '<div class="muted">按：' + esc(s.按) + '</div>' : '') + '</li>';
+    }).join('') + '</ol></details>';
+  }
+  function patCard(p) {
+    var meta = [];
+    if (p.宮) meta.push('Cung ' + palLabel(p.宮));
+    if (p.主客) meta.push('<span class="han">' + esc(p.主客) + '</span>');
+    var extra = [];
+    if (p.讀法) extra.push('Cách đọc: <span class="han">' + esc(p.讀法) + '</span>');
+    if (p.異名 && p.異名.length) extra.push('Tên khác: <span class="han">' + p.異名.map(function (a) { return esc(a.名) + '（' + esc(a.書) + '）'; }).join('、') + '</span>');
+    return '<article class="pat"><div class="pat-top">' + tag(p.吉凶) +
+      '<span class="pat-title">' + esc(hv(p.格) || p.格) + '<span class="han">' + esc(p.格) + '</span></span>' +
+      (meta.length ? '<span class="pat-meta">' + meta.join(' · ') + '</span>' : '') + '</div>' +
+      (p.細節 ? '<div class="pat-detail han">' + esc(p.細節) + '</div>' : '') +
+      (p.斷語 ? '<div class="pat-quote">' + esc(p.斷語) + '</div>' : '') +
+      (extra.length ? '<div class="pat-extra">' + extra.join(' · ') + '</div>' : '') + srcList(p) + '</article>';
+  }
+
+  /* ---------- Form & URL state ---------- */
+  function readForm() {
+    return {
+      d: $('date').value, t: $('time').value, tz: parseFloat($('tz').value),
+      m: document.querySelector('input[name=method]:checked').value, zi: $('zi').value,
+      y: $('yuan').value, gods: $('gods').value
+    };
+  }
+  function setNow() {
+    var n = nowIn(parseFloat($('tz').value));
+    $('date').value = n.getUTCFullYear() + '-' + pad(n.getUTCMonth() + 1) + '-' + pad(n.getUTCDate());
+    $('time').value = pad(n.getUTCHours()) + ':' + pad(n.getUTCMinutes());
+  }
+  function toUrl(f) {
+    var q = new URLSearchParams({ d: f.d, t: f.t, tz: String(f.tz), m: f.m === '符頭' ? 'ft' : (f.y === 'days' ? 'cb5' : 'cb') });
+    if (f.zi === '當日') q.set('zi', 'same');
+    if (f.gods === 'modern') q.set('g', 'modern');
+    return location.pathname + '?' + q.toString();
+  }
+  function fromUrl() {
+    var q = new URLSearchParams(location.search);
+    if (!q.get('d')) return false;
+    $('date').value = q.get('d'); $('time').value = q.get('t') || '12:00';
+    var tz = q.get('tz'); if (tz && $('tz').querySelector('option[value="' + tz + '"]')) $('tz').value = tz;
+    (q.get('m') === 'ft' ? $('m-ft') : $('m-cb')).checked = true;
+    if (q.get('m') === 'cb5') { $('yuan').value = 'days'; $('yuan').closest('details').open = true; }
+    if (q.get('zi') === 'same') { $('zi').value = '當日'; $('zi').closest('details').open = true; }
+    if (q.get('g') === 'modern') { $('gods').value = 'modern'; $('gods').closest('details').open = true; }
+    return true;
+  }
+  function run(pushState) {
+    var f = readForm(), err = $('error');
+    err.classList.remove('show');
+    try {
+      if (!Q) throw new Error('Không tải được engine lập quẻ.');
+      if (!f.d || !f.t) throw new Error('Vui lòng nhập ngày và giờ.');
+      var res = compute(f.d, f.t, f.tz, f.m, f.zi, f.y);
+      render(res, f);
+      if (pushState) history.replaceState(null, '', toUrl(f));
+    } catch (e) {
+      console.error(e);
+      err.textContent = e.message || 'Có lỗi khi lập quẻ.';
+      err.classList.add('show');
+    }
+  }
+  function toast(msg) { var t = $('toast'); t.textContent = msg; t.classList.add('show'); setTimeout(function () { t.classList.remove('show'); }, 1800); }
+
+  $('form').addEventListener('submit', function (e) { e.preventDefault(); run(true); });
+  $('btn-now').addEventListener('click', function () { setNow(); run(true); });
+  $('btn-share').addEventListener('click', function () {
+    var url = location.origin + toUrl(readForm());
+    if (navigator.clipboard) navigator.clipboard.writeText(url).then(function () { toast('Đã sao chép link quẻ'); }, function () { prompt('Link quẻ:', url); });
+    else prompt('Link quẻ:', url);
+  });
+  document.querySelectorAll('input[name=method], #zi, #tz, #yuan, #gods').forEach(function (el) {
+    el.addEventListener('change', function () { if (!$('result').hidden) run(true); });
+  });
+
+  if (!fromUrl()) setNow();
+  run(false);
+
+  // test hook
+  window.__qimenCompute = compute;
+})();
+</script>
+</body>
+</html>
