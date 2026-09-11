@@ -157,11 +157,26 @@
   .ln.good .vi { color: var(--good); }
   .ln.bad .vi { color: var(--bad); }
   .vig { font-size: 11px; color: var(--text-3); border: 1px solid var(--stroke-2); border-radius: 999px; padding: 0 6px; margin-left: 6px; white-space: nowrap; }
-  .stems { display: flex; flex-direction: column; align-items: center; justify-content: flex-start; gap: 2px; padding-left: 8px; border-left: 1px solid var(--stroke); min-width: 44px; }
+  .stems { display: flex; flex-direction: column; align-items: center; justify-content: flex-start; gap: 2px; padding-left: 22px; border-left: 1px solid var(--stroke); min-width: 44px; }
   .stem { font-family: var(--font-han); line-height: 1.1; text-align: center; }
   .stem.sky { font-size: 30px; color: var(--text); }
   .stem.earth { font-size: 22px; color: var(--text-2); margin-top: 4px; }
   .stem small { display: block; font-family: var(--font-ui); font-size: 10.5px; color: var(--text-3); margin-top: 1px; }
+  .stem { position: relative; }
+  .stem .g { display: inline-block; }
+  .stem.ring-day .g, .stem.ring-hour .g { border: 1.5px solid var(--text-2); border-radius: 50%; padding: 0 3px; }
+  .stem.ring-day .g { border-color: var(--accent); }
+  .stem.ring-hour .g { border-color: #8fb3e0; }
+  .cs { position: absolute; left: -16px; top: 2px; width: 16px; height: 16px; border: 1px solid var(--stroke-2); border-radius: 50%; font: 500 9.5px/14px var(--font-ui); color: var(--text-2); text-align: center; }
+  .jia { position: absolute; left: -2px; top: -8px; font-size: 10px; color: var(--good); font-family: var(--font-han); }
+  .ji { font-size: 12px; color: var(--bad); font-family: var(--font-han); margin-left: 1px; vertical-align: super; }
+  .tri { margin-left: 6px; font-size: 14px; color: var(--text-2); }
+  .tagmini { font-size: 10px; font-weight: 600; padding: 0 5px; border-radius: 4px; margin-left: 6px; white-space: nowrap; vertical-align: 1px; }
+  .tagmini.gold { background: var(--accent-soft); color: var(--accent); }
+  .tagmini.red { background: #b3262d; color: #fff; }
+  .cellpats { display: flex; flex-wrap: wrap; gap: 2px 8px; margin-top: 8px; font-size: 12px; font-weight: 500; }
+  .cellpats .good { color: var(--good); } .cellpats .bad { color: var(--bad); }
+  .legend .ring { display: inline-block; width: 12px; height: 12px; border-radius: 50%; border: 1.5px solid; vertical-align: -2px; margin-right: 5px; }
   .badges { display: flex; flex-wrap: wrap; gap: 4px; margin-top: 10px; }
   .bdg { font-size: 11px; padding: 1px 7px; border-radius: 999px; border: 1px solid var(--stroke-2); color: var(--text-2); white-space: nowrap; }
   .bdg.gold { border-color: rgba(205,176,122,0.45); color: var(--accent); background: var(--accent-soft); }
@@ -232,7 +247,12 @@
     .p-head { flex-direction: column; gap: 0; font-size: 10.5px; }
     .p-body { grid-template-columns: 1fr; gap: 6px; }
     .stems { flex-direction: row; justify-content: flex-start; align-items: baseline; gap: 10px; border-left: 0; border-bottom: 1px solid var(--stroke); padding: 0 0 6px; order: -1; min-width: 0; }
-    .stem.sky { font-size: 24px; } .stem.earth { font-size: 18px; margin-top: 0; }
+    .stem.sky { font-size: 24px; padding-left: 16px; } .stem.earth { font-size: 18px; margin-top: 0; }
+    .cs { left: 0; top: 5px; width: 14px; height: 14px; font-size: 8.5px; line-height: 12px; }
+    .jia { left: 14px; }
+    .tri { display: none; }
+    .tagmini { display: inline-block; margin: 2px 0 0; }
+    .cellpats { font-size: 10.5px; }
     .ln { font-size: 12px; }
     .ln .han { display: block; margin-left: 0; font-size: 11px; }
     .ln .role { display: none; }
@@ -344,6 +364,10 @@
       <div class="board" id="board"></div>
       <div class="legend">
         <span>Mỗi cung: <i>Bát thần</i> · <i>Cửu tinh</i> · <i>Bát môn</i> · Can <i>thiên bàn</i> (lớn) / <i>địa bàn</i> (nhỏ)</span>
+        <span><span class="ring" style="border-color:var(--accent)"></span>Can ngày</span>
+        <span><span class="ring" style="border-color:#8fb3e0"></span>Can giờ</span>
+        <span>Số trong vòng tròn: Thập nhị trường sinh của can thiên bàn tại cung</span>
+        <span><span class="han" style="color:var(--good)">甲</span> Giáp ẩn dưới Trực phù · <span class="han" style="color:var(--bad)">丙</span> can Trung cung ký</span>
         <span><span class="dot" style="background:var(--good)"></span>Cát môn / cát tinh</span>
         <span><span class="dot" style="background:var(--bad)"></span>Hung môn / hung tinh</span>
       </div>
@@ -404,6 +428,7 @@
     '雀':'tước','霧':'vụ','靈':'linh','青':'thanh','順':'thuận','飛':'phi','首':'thủ','高':'cao','鬼':'quỷ','魂':'hồn','鳥':'điểu','龍':'long',
     '九':'cửu','八':'bát','一':'nhất','二':'nhị','七':'thất','乙奇':'Ất kỳ'
   };
+  var PAT_VI = { '值符飛宮':'Thiên Ất phi cung', '太白天乙伏宮':'Thái Bạch Thiên Ất phục cung' };
   function cap(w) { return w.charAt(0).toUpperCase() + w.slice(1); }
   function hv(s) {
     if (!s) return '';
@@ -449,6 +474,43 @@
   }
   function esc(s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return { '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;' }[c]; }); }
   function palLabel(p) { var x = PAL[p]; return x ? x.vi + ' ' + x.n : p; }
+
+  var PALACE_BRANCH = { '坎':'子','艮':'寅','震':'卯','巽':'巳','離':'午','坤':'未','兌':'酉','乾':'亥' };
+  var CS_START = { '甲':'亥','乙':'午','丙':'寅','丁':'酉','戊':'寅','己':'酉','庚':'巳','辛':'子','壬':'申','癸':'卯' };
+  var CS_NAME = ['Trường sinh','Mộc dục','Quan đới','Lâm quan','Đế vượng','Suy','Bệnh','Tử','Mộ','Tuyệt','Thai','Dưỡng'];
+  function changSheng(stem, br) {        // Thập nhị trường sinh: can dương thuận, can âm nghịch
+    var s = BRANCHES.indexOf(CS_START[stem]), b = BRANCHES.indexOf(br);
+    if (s < 0 || b < 0) return 0;
+    return (STEMS.indexOf(stem) % 2 === 0 ? (b - s + 12) % 12 : (s - b + 12) % 12) + 1;
+  }
+  var XUN_YI = { '甲子':'戊','甲戌':'己','甲申':'庚','甲午':'辛','甲辰':'壬','甲寅':'癸' };
+  function xunHeadOf(gz) { var s = STEMS.indexOf(gz[0]), b = BRANCHES.indexOf(gz[1]); return '甲' + BRANCHES[((b - s) % 12 + 12) % 12]; }
+  // Bản vị quẻ của Bát thần (vị trí gốc khi Dương độn, Trực phù khởi Khảm)
+  var GOD_TRI = {
+    '值符':['☵','Khảm'],'騰蛇':['☶','Cấn'],'螣蛇':['☶','Cấn'],'太陰':['☳','Chấn'],'六合':['☴','Tốn'],
+    '白虎':['☲','Ly'],'勾陳':['☲','Ly'],'玄武':['☷','Khôn'],'朱雀':['☷','Khôn'],'九地':['☱','Đoài'],'九天':['☰','Càn']
+  };
+  // Cách cục bổ sung mà engine chưa xét
+  function extraPatterns(o) {
+    var out = [], yi = o.符首;
+    PALACES.forEach(function (p, i) {
+      if (p === '中') return;
+      var sky = o.天盤[i], earth = o.地盤[i], door = o.天門[i];
+      // Thiên Ất phục cung: Canh (thiên bàn) gia lên nghi ẩn Giáp của Trực phù
+      if (sky === '庚' && earth === yi && yi !== '戊')
+        out.push({ 類: '格局', 格: '天乙伏宮', vi: 'Thiên Ất phục cung', 吉凶: '凶', 宮: p, 細節: '天盤庚加地盤' + yi + '（旬首' + o.旬首 + '所遁）於' + p + '宮',
+          出處: [{ 書: '奇門遁甲統宗', 篇: '十干克應', 文: '庚加甲為伏宮，百戰百敗。' }] });
+      // Thiên Ất phi cung: nghi ẩn Giáp của Trực phù gia lên Canh (engine đã xét trường hợp Mậu)
+      if (earth === '庚' && sky === yi && yi !== '戊')
+        out.push({ 類: '格局', 格: '天乙飛宮', vi: 'Thiên Ất phi cung', 吉凶: '凶', 宮: p, 細節: '天盤' + yi + '（旬首' + o.旬首 + '所遁）加地盤庚於' + p + '宮',
+          出處: [{ 書: '奇門遁甲統宗', 篇: '十干克應', 文: '甲加庚為飛宮，主客皆不利。' }] });
+      // Tam kỳ chi linh: Ất/Bính/Đinh ở thiên bàn cùng cung với Khai/Hưu/Sinh môn
+      if ('乙丙丁'.indexOf(sky) >= 0 && (door === '開門' || door === '休門' || door === '生門'))
+        out.push({ 類: '格局', 格: '三奇之靈', vi: 'Tam kỳ chi linh', 吉凶: '吉', 宮: p, 細節: '天盤' + sky + '奇與' + door + '同宮於' + p + '宮',
+          出處: [{ 書: '奇門遁甲', 篇: '吉格', 文: '三奇得吉門為三奇之靈。' }] });
+    });
+    return out;
+  }
 
   /* ---------- Time handling ---------- */
   function pad(n) { return String(n).padStart(2, '0'); }
@@ -550,42 +612,63 @@
 
     // Board
     var vig = {}; try { (Q.assessVigor(o).八門 || []).forEach(function (d) { vig[d.宮] = d.狀態; }); } catch (e) {}
+    var pats = []; try { pats = Q.detectPatterns(o); } catch (e) { console.error(e); }
+    pats = pats.concat(extraPatterns(o));
+    var hourYi = o.符首;                                      // nghi ẩn Giáp của tuần giờ (Trực phù)
+    var dayYi = XUN_YI[xunHeadOf(o.日柱)];
+    var dayMark = o.日柱[0] === '甲' ? dayYi : o.日柱[0];       // can ngày trên thiên bàn (Giáp thì lấy nghi ẩn)
+    var hourMark = o.時干 === '甲' ? hourYi : o.時干;
+    var jiSky = o.中宮寄干 && o.中宮寄干.落宮;                 // Thiên bàn: can Trung cung đi theo Thiên Nhuế
+    var CELL_SKIP = { '和義': 1, '宮迫': 1, '門迫': 1 };
+    // Các cách nổi tiếng trong Thập can khắc ứng cũng hiện trong ô cung
+    var CELL_KY = { '大格':1,'小格':1,'刑格':1,'值符飛宮':1,'太白天乙伏宮':1,'青龍返首':1,'飛鳥跌穴':1,'太白入熒':1,'熒入太白':1,
+      '朱雀投江':1,'螣蛇夭矯':1,'白虎猖狂':1,'青龍逃走':1,'伏吟天庭':1 };
     $('board').innerHTML = PALACES.map(function (p, i) {
       var info = PAL[p];
       if (p === '中') {
         return '<div class="palace center" aria-label="Trung cung"><div class="p-name">Trung 5 <span class="han">中</span></div>' +
-          '<div class="big">' + esc(o.地盤[4]) + '</div><div class="sub">Địa bàn ' + HV[o.地盤[4]] + '</div>' +
-          '<div class="sub" style="margin-top:6px">Thiên Cầm <span class="han">天禽</span> ký ' + palLabel(o.天禽落宮) + '</div></div>';
+          '<div class="big">' + esc(o.地盤[4]) + '</div><div class="sub">' + HV[o.地盤[4]] + ' ký cung</div>' +
+          '<div class="sub" style="margin-top:6px" title="Thiên bàn theo Thiên Nhuế, địa bàn ký Khôn 2">Thiên → ' + palLabel(jiSky) + '<br>Địa → Khôn 2</div></div>';
       }
       var g = o.八神[i], s = o.九星[i];
       if (input.gods === 'modern') g = g === '勾陳' ? '白虎' : g === '朱雀' ? '玄武' : g;
       var d = o.天門[i], sky = o.天盤[i], earth = o.地盤[i];
       var st = STAR[s] || [s, ''], dr = DOOR[d] || [d, ''];
+      var cs = changSheng(sky, PALACE_BRANCH[p]);
+      var skyCls = 'stem sky' + (sky === dayMark ? ' ring-day' : '') + (sky === hourMark ? ' ring-hour' : '');
+      var skyTitle = 'Thiên bàn ' + (HV[sky] || '') + (sky === dayMark ? ' · can ngày' : '') + (sky === hourMark ? ' · can giờ' : '');
+      var skyJi = jiSky === p ? '<sup class="ji" title="Can Trung cung ký theo Thiên Nhuế">' + esc(o.地盤[4]) + '</sup>' : '';
+      var earthJi = p === '坤' ? '<sup class="ji" title="Can Trung cung ký Khôn 2">' + esc(o.地盤[4]) + '</sup>' : '';
+      var jiaMark = o.值符落宮 === p ? '<sup class="jia" title="Giáp ' + esc(o.旬首) + ' ẩn dưới ' + esc(hourYi) + '">甲</sup>' : '';
+      var gt = GOD_TRI[g] || ['', ''];
       var badges = [];
-      if (o.值符落宮 === p) badges.push('<span class="bdg gold">Trực phù</span>');
-      if (o.值使落宮 === p) badges.push('<span class="bdg gold">Trực sử</span>');
       if (voidPal[p]) badges.push('<span class="bdg void">Không vong</span>');
-      if (horsePal === p) badges.push('<span class="bdg">Mã</span>');
-      if (o.中宮寄干 && o.中宮寄干.落宮 === p) badges.push('<span class="bdg">Ký ' + HV[o.中宮寄干.干] + '</span>');
+      if (horsePal === p) badges.push('<span class="bdg">Mã tinh</span>');
+      var cellPats = pats.filter(function (x) { return x.宮 === p && (x.類 === '十干克應' ? CELL_KY[x.格] : !CELL_SKIP[x.格]); });
       var cls = 'palace' + (o.值符落宮 === p ? ' is-fu' : '') + (o.值使落宮 === p ? ' is-shi' : '');
       var v = vig[p];
       return '<div class="' + cls + '" aria-label="Cung ' + info.vi + ' ' + info.n + '">' +
         '<div class="p-head"><span class="p-name">' + info.vi + ' ' + info.n + '<span class="han">' + p + '</span></span><span>' + info.dir + '</span></div>' +
         '<div class="p-body"><div class="p-lines">' +
-          '<div class="ln"><span class="role">Thần</span><span class="vi">' + esc(GOD[g] || g) + '</span><span class="han">' + esc(g) + '</span></div>' +
+          '<div class="ln"><span class="role">Thần</span><span class="vi">' + esc(GOD[g] || g) + '</span><span class="han">' + esc(g) + '</span>' +
+            (gt[0] ? '<span class="tri" title="Bản vị quẻ ' + gt[1] + '">' + gt[0] + '</span>' : '') +
+            (g === '值符' ? '<span class="tagmini gold">Trực phù</span>' : '') + '</div>' +
           '<div class="ln ' + st[1] + '"><span class="role">Tinh</span><span class="vi">' + esc(st[0]) + '</span><span class="han">' + esc(s) + '</span></div>' +
           '<div class="ln ' + dr[1] + '"><span class="role">Môn</span><span class="vi">' + esc(dr[0]) + '</span><span class="han">' + esc(d) + '</span>' +
-            (v ? '<span class="vig" title="Trạng thái vượng suy của môn">' + esc(VIGOR[v] || v) + '</span>' : '') + '</div>' +
+            (o.值使落宮 === p ? '<span class="tagmini red">Trị sử</span>' : '') +
+            (v ? '<span class="vig" title="Vượng suy của môn theo tiết">' + esc(VIGOR[v] || v) + '</span>' : '') + '</div>' +
         '</div><div class="stems">' +
-          '<div class="stem sky" title="Thiên bàn">' + esc(sky) + '<small>' + (HV[sky] || '') + '</small></div>' +
-          '<div class="stem earth" title="Địa bàn">' + esc(earth) + '<small>' + (HV[earth] || '') + '</small></div>' +
+          '<div class="' + skyCls + '" title="' + skyTitle + '"><span class="cs" title="' + CS_NAME[cs - 1] + '">' + cs + '</span>' + jiaMark + '<span class="g">' + esc(sky) + '</span>' + skyJi + '<small>' + (HV[sky] || '') + '</small></div>' +
+          '<div class="stem earth" title="Địa bàn ' + (HV[earth] || '') + '"><span class="g">' + esc(earth) + '</span>' + earthJi + '<small>' + (HV[earth] || '') + '</small></div>' +
         '</div></div>' +
+        (cellPats.length ? '<div class="cellpats">' + cellPats.map(function (x) {
+          return '<span class="' + (x.吉凶 === '吉' ? 'good' : x.吉凶 === '凶' ? 'bad' : '') + '" title="' + esc(x.格) + '">' + esc(x.vi || PAT_VI[x.格] || hv(x.格) || x.格) + '</span>';
+        }).join('') + '</div>' : '') +
         (badges.length ? '<div class="badges">' + badges.join('') + '</div>' : '') +
       '</div>';
     }).join('');
 
     // Patterns
-    var pats = []; try { pats = Q.detectPatterns(o); } catch (e) { console.error(e); }
     var main = pats.filter(function (p) { return p.類 !== '十干克應'; });
     var ky = pats.filter(function (p) { return p.類 === '十干克應'; });
     main.sort(function (a, b) { return (a.宮 ? 1 : 0) - (b.宮 ? 1 : 0); });
@@ -598,7 +681,7 @@
       var m = /天盤(.)加地盤(.)/.exec(p.細節 || '') || [];
       return '<div class="kyrow"><div class="ky-pal">' + palLabel(p.宮) + '<span class="han">' + esc(p.宮) + '</span></div>' +
         '<div class="ky-gan">' + esc((m[1] || '') + '＋' + (m[2] || '')) + '<small>' + (HV[m[1]] || '') + ' gia ' + (HV[m[2]] || '') + '</small></div>' +
-        '<div class="ky-body"><div class="pat-top">' + tag(p.吉凶) + '<span class="pat-title">' + esc(hv(p.格) || p.格) + '<span class="han">' + esc(p.格) + '</span></span></div>' +
+        '<div class="ky-body"><div class="pat-top">' + tag(p.吉凶) + '<span class="pat-title">' + esc(PAT_VI[p.格] || hv(p.格) || p.格) + '<span class="han">' + esc(p.格) + '</span></span></div>' +
         (p.斷語 ? '<div class="pat-quote">' + esc(p.斷語) + '</div>' : '') + srcList(p) + '</div></div>';
     }).join('');
 
@@ -638,7 +721,7 @@
     if (p.讀法) extra.push('Cách đọc: <span class="han">' + esc(p.讀法) + '</span>');
     if (p.異名 && p.異名.length) extra.push('Tên khác: <span class="han">' + p.異名.map(function (a) { return esc(a.名) + '（' + esc(a.書) + '）'; }).join('、') + '</span>');
     return '<article class="pat"><div class="pat-top">' + tag(p.吉凶) +
-      '<span class="pat-title">' + esc(hv(p.格) || p.格) + '<span class="han">' + esc(p.格) + '</span></span>' +
+      '<span class="pat-title">' + esc(p.vi || PAT_VI[p.格] || hv(p.格) || p.格) + '<span class="han">' + esc(p.格) + '</span></span>' +
       (meta.length ? '<span class="pat-meta">' + meta.join(' · ') + '</span>' : '') + '</div>' +
       (p.細節 ? '<div class="pat-detail han">' + esc(p.細節) + '</div>' : '') +
       (p.斷語 ? '<div class="pat-quote">' + esc(p.斷語) + '</div>' : '') +
