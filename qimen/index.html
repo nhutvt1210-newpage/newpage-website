@@ -8,8 +8,11 @@
 <link rel="icon" href="/favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preload" href="/qimen/vendor/qm-han.woff" as="font" type="font/woff" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@400;500;600&family=Noto+Serif:wght@400;500&family=Noto+Serif+TC:wght@400;600&display=swap" rel="stylesheet">
 <style>
+  /* Chữ Hán nhúng sẵn (subset Noto Serif CJK TC) để luôn đúng nét dù Google Fonts không tải được */
+  @font-face { font-family: "QM Han"; src: url("/qimen/vendor/qm-han.woff") format("woff"); font-weight: 400; font-style: normal; font-display: swap; }
   :root {
     --bg: #050505;
     --surface: rgba(255,255,255,0.028);
@@ -28,7 +31,7 @@
     --radius: 14px;
     --font-ui: "Inter Tight", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
     --font-serif: "Noto Serif", Georgia, "Times New Roman", serif;
-    --font-han: "Noto Serif TC", "Songti TC", "PMingLiU", "MingLiU", serif;
+    --font-han: "QM Han", "Noto Serif TC", "Noto Serif CJK TC", "Songti TC", "PMingLiU", serif;
   }
   * { box-sizing: border-box; }
   html { -webkit-text-size-adjust: 100%; }
@@ -264,6 +267,89 @@
     .ky-body { grid-column: 1 / -1; }
     .pat-meta { margin-left: 0; width: 100%; }
   }
+
+  /* ===== Bàn cửu cung: bố cục theo bảng truyền thống, ngôn ngữ thị giác bản gốc ===== */
+  .qb-wrap { overflow-x: auto; -webkit-overflow-scrolling: touch; padding: 4px 2px 6px; }
+  .qb { display: grid; gap: 8px; min-width: 640px; position: relative;
+    grid-template-columns: 26px repeat(3, minmax(0, 1fr)) 26px; grid-template-rows: 26px repeat(3, auto) 26px;
+    grid-template-areas:
+      "cTL tTon tLy tKhon cTR"
+      "lTon Ton Ly Khon rKhon"
+      "lChan Chan Mid Doai rDoai"
+      "lCan Can Kham Kien rKien"
+      "cBL bCan bKham bKien cBR";
+    --ly: #d8544e; --khon: #d9ae4c; --doai: #c4c4d2; --kien: #7275a0; --kham: #4b82db; --can: #a06a48; --chan: #2f8a53; --ton: #58b673;
+  }
+  /* nhãn phương vị ở rãnh ngoài */
+  .qb-lbl { display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 11.5px; font-weight: 600; letter-spacing: 0.1em; color: var(--ec); }
+  .qb-lbl.v { flex-direction: column; gap: 6px; }
+  .qb-lbl .mk { font-family: var(--font-han); font-weight: 400; font-size: 12.5px; letter-spacing: 0; color: var(--text-2);
+    border: 1px dashed var(--stroke-2); border-radius: 999px; padding: 0 6px; line-height: 18px; }
+  .qb-lbl .horse { font-size: 13px; color: var(--text-2); border: 1px solid var(--stroke-2); border-radius: 999px; padding: 0 6px; line-height: 18px; }
+  .qb-lbl.v .mk, .qb-lbl.v .horse { padding: 4px 0; width: 20px; text-align: center; }
+
+  /* ô cung */
+  .qb-cell { position: relative; background: var(--surface); border: 1px solid var(--stroke); border-radius: 14px; padding: 14px 14px 12px 12px; min-height: 206px;
+    display: grid; grid-template-columns: 70px 1fr 1fr; grid-template-rows: auto 1fr auto; column-gap: 12px; min-width: 0; }
+  .qb-cell.fu { border-color: rgba(205,176,122,0.45); }
+  .qb-stems { grid-row: 1 / 4; display: flex; flex-direction: column; justify-content: space-between; border-right: 1px solid var(--stroke); padding: 2px 10px 0 22px; }
+  .qb-stem { font-family: var(--font-han); line-height: 1.1; position: relative; display: inline-block; }
+  .qb-stems .sky .qb-stem { font-size: 30px; color: var(--text); }
+  .qb-stems .earth .qb-stem { font-size: 22px; color: var(--text-2); }
+  .qb-stems small { display: block; font-size: 11px; color: var(--text-3); margin-top: 2px; }
+  .qb-stem.ring-day, .qb-stem.ring-hour { border: 1.5px solid var(--accent); border-radius: 50%; padding: 0 5px; margin-left: -7px; }
+  .qb-stem.ring-hour { border-color: #8fb3e0; }
+  .qb .cs { position: absolute; left: -21px; top: 50%; transform: translateY(-50%); width: 16px; height: 16px; border: 1px solid var(--stroke-2); border-radius: 50%;
+    font: 500 9px/14px var(--font-ui); color: var(--text-2); text-align: center; }
+  .qb-stem.ring-day .cs, .qb-stem.ring-hour .cs { left: -26px; }
+  .qb .jia { position: absolute; left: 0; top: -11px; font-size: 10.5px; color: var(--good); font-family: var(--font-han); }
+  .qb .ji { position: absolute; right: -13px; top: -1px; font-size: 12px; color: var(--bad); font-family: var(--font-han); }
+
+  .qb-item { min-width: 0; line-height: 1.3; }
+  .qb-item .role { display: block; font-size: 10px; color: var(--text-3); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 3px; }
+  .qb-item .vi { display: block; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .qb-item .hz { display: block; font-family: var(--font-han); font-size: 12.5px; color: var(--text-3); margin-top: 1px; }
+  .qb-item.good .vi { color: var(--good); } .qb-item.bad .vi { color: var(--bad); }
+  .qb-item .short { display: none; }
+  .qb-tri { position: absolute; top: 8px; right: 12px; display: flex; flex-direction: column; align-items: center; gap: 3px; font-size: 16px; line-height: 1; color: var(--text-2); }
+  .qb-tri b { font: 500 14px/1 var(--font-ui); color: var(--text); }
+  .qb-mid { grid-column: 2 / -1; display: flex; align-items: center; justify-content: flex-end; padding: 8px 0; min-height: 40px; }
+  .qb-pats { text-align: right; font-size: 12.5px; font-weight: 500; line-height: 1.4; }
+  .qb-pats span { display: block; }
+  .qb-pats .good { color: var(--good); } .qb-pats .bad { color: var(--bad); }
+  .qb-door, .qb-num { align-self: end; }
+  .qb-door .trisu { display: inline-block; font-size: 10px; font-weight: 600; padding: 0 6px; border-radius: 4px; background: #b3262d; color: #fff; letter-spacing: 0.02em; margin-bottom: 3px; white-space: nowrap; }
+  .qb-door .vig { display: inline-block; margin: 5px 0 0; margin-left: 0; }
+  .qb-num { text-align: right; }
+  .qb-num .n { font-size: 30px; font-weight: 300; line-height: 1; color: var(--text-2); }
+  .qb-num small { display: block; font-size: 11px; color: var(--text-3); margin-top: 5px; white-space: nowrap; }
+  .qb-center { background: transparent; border-style: dashed; display: flex; flex-direction: column; justify-content: space-between; padding: 14px 16px; }
+  .qb-center .qb-stems { border-right: 0; padding-left: 0; height: 100%; }
+  .qb-center .cname { text-align: center; color: var(--text-2); font-size: 13px; }
+  .qb-center .note2 { font-size: 11.5px; color: var(--text-3); text-align: center; line-height: 1.6; margin-top: 4px; }
+
+  /* Vòng la bàn: gradient ngũ hành chạy quanh bàn */
+  .qb-ring { grid-area: 2 / 2 / 5 / 5; margin: -7px; border-radius: 20px; pointer-events: none; display: block; position: relative; z-index: 0; }
+  .qb-ring::before, .qb-ring::after { content: ""; position: absolute; inset: 0; border-radius: inherit; padding: 1.5px;
+    background: conic-gradient(from 0deg, var(--ly), var(--khon) 45deg, var(--doai) 90deg, var(--kien) 135deg, var(--kham) 180deg, var(--can) 225deg, var(--chan) 270deg, var(--ton) 315deg, var(--ly) 360deg);
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask-composite: exclude; }
+  .qb-ring::after { filter: blur(8px); opacity: 0.55; padding: 3px; }
+  .qb-cell, .qb-lbl { z-index: 1; }
+
+  .qb-hint { display: none; font-size: 12.5px; color: var(--text-3); margin: 0 0 8px; }
+  @media (max-width: 700px) {
+    .qb { min-width: 600px; gap: 6px; grid-template-columns: 22px repeat(3, minmax(0, 1fr)) 22px; grid-template-rows: 22px repeat(3, auto) 22px; }
+    .qb-cell { grid-template-columns: 58px 1fr 1fr; column-gap: 8px; padding: 12px 10px 10px 8px; min-height: 176px; }
+    .qb-stems { padding-left: 19px; padding-right: 6px; }
+    .qb-stems .sky .qb-stem { font-size: 25px; } .qb-stems .earth .qb-stem { font-size: 19px; }
+    .qb-item .role { display: none; } .qb-item .vi { font-size: 12.5px; white-space: normal; overflow: visible; } .qb-item .hz { font-size: 11px; }
+    .qb-cell { padding-top: 36px; } .qb-tri { top: 6px; right: 9px; font-size: 13px; gap: 2px; } .qb-tri b { font-size: 12px; }
+    .qb-item .full { display: none; } .qb-item .short { display: inline; }
+    .qb-num .n { font-size: 24px; } .qb-pats { font-size: 11px; }
+    .qb-hint { display: block; }
+  }
+  .lg-ring { display: inline-block; font-family: var(--font-han); border: 1.5px solid var(--text-2); border-radius: 50%; padding: 0 4px; margin-right: 4px; color: var(--text); }
+  .lg-cs { display: inline-block; width: 16px; height: 16px; border: 1px solid var(--text-2); border-radius: 50%; font-size: 10px; line-height: 14px; text-align: center; margin-right: 4px; color: var(--text); }
 </style>
 </head>
 <body>
@@ -361,15 +447,15 @@
         <h2 id="h-board">Cửu cung<span class="han">九宮</span></h2>
         <span class="muted">Hướng Nam ở trên, theo cách bày truyền thống</span>
       </div>
-      <div class="board" id="board"></div>
+      <p class="qb-hint">Vuốt ngang để xem đủ bàn cửu cung →</p>
+      <div class="qb-wrap"><div class="qb" id="board"></div></div>
       <div class="legend">
-        <span>Mỗi cung: <i>Bát thần</i> · <i>Cửu tinh</i> · <i>Bát môn</i> · Can <i>thiên bàn</i> (lớn) / <i>địa bàn</i> (nhỏ)</span>
-        <span><span class="ring" style="border-color:var(--accent)"></span>Can ngày</span>
-        <span><span class="ring" style="border-color:#8fb3e0"></span>Can giờ</span>
-        <span>Số trong vòng tròn: Thập nhị trường sinh của can thiên bàn tại cung</span>
+        <span><span class="lg-ring" style="border-color:var(--accent)">戊</span>Can ngày</span>
+        <span><span class="lg-ring" style="border-color:#8fb3e0">辛</span>Can giờ</span>
+        <span><span class="lg-cs">5</span>Thập nhị trường sinh của can thiên bàn</span>
         <span><span class="han" style="color:var(--good)">甲</span> Giáp ẩn dưới Trực phù · <span class="han" style="color:var(--bad)">丙</span> can Trung cung ký</span>
-        <span><span class="dot" style="background:var(--good)"></span>Cát môn / cát tinh</span>
-        <span><span class="dot" style="background:var(--bad)"></span>Hung môn / hung tinh</span>
+        <span>Góc trên phải: số và quẻ của Bát thần · Số lớn: cửu cung phi tinh</span>
+        <span><span class="dot" style="background:var(--good)"></span>Cát · <span class="dot" style="background:var(--bad)"></span>Hung · Viền màu theo ngũ hành phương vị</span>
       </div>
     </section>
 
@@ -397,7 +483,7 @@
   </div>
 
   <footer>
-    <p>Engine: <a href="https://github.com/arc119226/qimen_dunjia" target="_blank" rel="noopener">qimen-dunjia</a> v3.1.0 (MIT) · Lịch: <a href="https://github.com/6tail/lunar-javascript" target="_blank" rel="noopener">lunar-javascript</a> (MIT) · <a href="/qimen/vendor/THIRD-PARTY-LICENSES.txt">Giấy phép</a></p>
+    <p>Engine: <a href="https://github.com/arc119226/qimen_dunjia" target="_blank" rel="noopener">qimen-dunjia</a> v3.1.0 (MIT) · Lịch: <a href="https://github.com/6tail/lunar-javascript" target="_blank" rel="noopener">lunar-javascript</a> (MIT) · <a href="/qimen/vendor/THIRD-PARTY-LICENSES.txt">Giấy phép</a> · Font chữ Hán: Noto Serif CJK (<a href="/qimen/vendor/OFL-Noto-Serif-CJK.txt">OFL</a>)</p>
     <p>Công cụ này chỉ để tham khảo, tìm hiểu văn hóa, không thay thế tư vấn chuyên môn.</p>
     <p>© newpage</p>
   </footer>
@@ -475,6 +561,12 @@
   function esc(s) { return String(s == null ? '' : s).replace(/[&<>"]/g, function (c) { return { '&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;' }[c]; }); }
   function palLabel(p) { var x = PAL[p]; return x ? x.vi + ' ' + x.n : p; }
 
+  var EL = { '甲':'wood','乙':'wood','丙':'fire','丁':'fire','戊':'earth','己':'earth','庚':'metal','辛':'metal','壬':'water','癸':'water',
+    '天蓬':'water','天芮':'earth','天沖':'wood','天輔':'wood','天禽':'earth','天心':'metal','天柱':'metal','天任':'earth','天英':'fire',
+    '休門':'water','生門':'earth','傷門':'wood','杜門':'wood','景門':'fire','死門':'earth','驚門':'metal','開門':'metal',
+    '值符':'earth','騰蛇':'fire','螣蛇':'fire','太陰':'metal','六合':'wood','白虎':'metal','勾陳':'earth','玄武':'water','朱雀':'fire','九地':'earth','九天':'metal' };
+  var EL_CLS = {}; Object.keys(EL).forEach(function (k) { EL_CLS[k] = 'e-' + EL[k]; });
+  var GOD_1 = { '值符':'符','騰蛇':'蛇','螣蛇':'蛇','太陰':'陰','六合':'合','白虎':'虎','勾陳':'勾','玄武':'玄','朱雀':'雀','九地':'地','九天':'天' };
   var PALACE_BRANCH = { '坎':'子','艮':'寅','震':'卯','巽':'巳','離':'午','坤':'未','兌':'酉','乾':'亥' };
   var CS_START = { '甲':'亥','乙':'午','丙':'寅','丁':'酉','戊':'寅','己':'酉','庚':'巳','辛':'子','壬':'申','癸':'卯' };
   var CS_NAME = ['Trường sinh','Mộc dục','Quan đới','Lâm quan','Đế vượng','Suy','Bệnh','Tử','Mộ','Tuyệt','Thai','Dưỡng'];
@@ -486,9 +578,9 @@
   var XUN_YI = { '甲子':'戊','甲戌':'己','甲申':'庚','甲午':'辛','甲辰':'壬','甲寅':'癸' };
   function xunHeadOf(gz) { var s = STEMS.indexOf(gz[0]), b = BRANCHES.indexOf(gz[1]); return '甲' + BRANCHES[((b - s) % 12 + 12) % 12]; }
   // Bản vị quẻ của Bát thần (vị trí gốc khi Dương độn, Trực phù khởi Khảm)
-  var GOD_TRI = {
-    '值符':['☵','Khảm'],'騰蛇':['☶','Cấn'],'螣蛇':['☶','Cấn'],'太陰':['☳','Chấn'],'六合':['☴','Tốn'],
-    '白虎':['☲','Ly'],'勾陳':['☲','Ly'],'玄武':['☷','Khôn'],'朱雀':['☷','Khôn'],'九地':['☱','Đoài'],'九天':['☰','Càn']
+  var GOD_TRI = {  // [quẻ, tên quẻ, số] — số theo bảng tham chiếu, cố định theo Thần
+    '值符':['☵','Khảm',4],'騰蛇':['☶','Cấn',1],'螣蛇':['☶','Cấn',1],'太陰':['☳','Chấn',7],'六合':['☴','Tốn',6],
+    '白虎':['☲','Ly',3],'勾陳':['☲','Ly',3],'玄武':['☷','Khôn',0],'朱雀':['☷','Khôn',0],'九地':['☱','Đoài',2],'九天':['☰','Càn',5]
   };
   // Cách cục bổ sung mà engine chưa xét
   function extraPatterns(o) {
@@ -623,50 +715,71 @@
     // Các cách nổi tiếng trong Thập can khắc ứng cũng hiện trong ô cung
     var CELL_KY = { '大格':1,'小格':1,'刑格':1,'值符飛宮':1,'太白天乙伏宮':1,'青龍返首':1,'飛鳥跌穴':1,'太白入熒':1,'熒入太白':1,
       '朱雀投江':1,'螣蛇夭矯':1,'白虎猖狂':1,'青龍逃走':1,'伏吟天庭':1 };
-    $('board').innerHTML = PALACES.map(function (p, i) {
-      var info = PAL[p];
+    var EDGE = { '巽':['--ton','ĐN'], '離':['--ly','N'], '坤':['--khon','TN'], '震':['--chan','Đ'], '兌':['--doai','T'],
+      '艮':['--can','ĐB'], '坎':['--kham','B'], '乾':['--kien','TB'] };
+    var AREA = { '巽':'Ton','離':'Ly','坤':'Khon','震':'Chan','中':'Mid','兌':'Doai','艮':'Can','坎':'Kham','乾':'Kien' };
+    function ec(p) { return 'var(' + EDGE[p][0] + ')'; }
+    function marks(p) {
+      var m = '';
+      if (voidPal[p]) m += '<span class="mk" title="Không vong">空</span>';
+      if (horsePal === p) m += '<span class="horse" title="Dịch mã">♞</span>';
+      return m;
+    }
+    // nhãn rãnh ngoài: area, cung, có ghi chữ phương không, dọc hay ngang, có đặt ký hiệu không
+    function lbl(area, p, text, vertical, withMarks) {
+      return '<div class="qb-lbl' + (vertical ? ' v' : '') + '" style="grid-area:' + area + ';--ec:' + ec(p) + '">' + (text || '') + (withMarks ? marks(p) : '') + '</div>';
+    }
+    var flyN = {}; // cửu cung phi tinh: cục số nhập trung, phi thuận theo lộ trình Lạc Thư
+    ['中','乾','兌','艮','離','坎','坤','震','巽'].forEach(function (p, k) { flyN[p] = ((o.局數 - 1 + k) % 9) + 1; });
+
+    function cell(p, i) {
       if (p === '中') {
-        return '<div class="palace center" aria-label="Trung cung"><div class="p-name">Trung 5 <span class="han">中</span></div>' +
-          '<div class="big">' + esc(o.地盤[4]) + '</div><div class="sub">' + HV[o.地盤[4]] + ' ký cung</div>' +
-          '<div class="sub" style="margin-top:6px" title="Thiên bàn theo Thiên Nhuế, địa bàn ký Khôn 2">Thiên → ' + palLabel(jiSky) + '<br>Địa → Khôn 2</div></div>';
+        var c = o.地盤[4];
+        return '<div class="qb-cell qb-center" style="grid-area:Mid" aria-label="Trung cung">' +
+          '<div class="qb-stems"><div class="sky"><span class="qb-stem">' + esc(c) + '</span><small>' + HV[c] + '</small></div>' +
+          '<div><div class="cname">Trung 5 <span class="han">中</span></div><div class="note2">Thiên bàn ký ' + palLabel(jiSky) + '<br>Địa bàn ký Khôn 2</div></div>' +
+          '<div class="earth"><span class="qb-stem">' + esc(c) + '</span><small>' + HV[c] + '</small></div></div></div>';
       }
-      var g = o.八神[i], s = o.九星[i];
+      var g = o.八神[i], s = o.九星[i], d = o.天門[i], sky = o.天盤[i], earth = o.地盤[i];
       if (input.gods === 'modern') g = g === '勾陳' ? '白虎' : g === '朱雀' ? '玄武' : g;
-      var d = o.天門[i], sky = o.天盤[i], earth = o.地盤[i];
-      var st = STAR[s] || [s, ''], dr = DOOR[d] || [d, ''];
       var cs = changSheng(sky, PALACE_BRANCH[p]);
-      var skyCls = 'stem sky' + (sky === dayMark ? ' ring-day' : '') + (sky === hourMark ? ' ring-hour' : '');
-      var skyTitle = 'Thiên bàn ' + (HV[sky] || '') + (sky === dayMark ? ' · can ngày' : '') + (sky === hourMark ? ' · can giờ' : '');
-      var skyJi = jiSky === p ? '<sup class="ji" title="Can Trung cung ký theo Thiên Nhuế">' + esc(o.地盤[4]) + '</sup>' : '';
-      var earthJi = p === '坤' ? '<sup class="ji" title="Can Trung cung ký Khôn 2">' + esc(o.地盤[4]) + '</sup>' : '';
-      var jiaMark = o.值符落宮 === p ? '<sup class="jia" title="Giáp ' + esc(o.旬首) + ' ẩn dưới ' + esc(hourYi) + '">甲</sup>' : '';
+      var ring = sky === dayMark ? ' ring-day' : sky === hourMark ? ' ring-hour' : '';
+      var tip = 'Thiên bàn ' + HV[sky] + (sky === dayMark ? ' · can ngày' : '') + (sky === hourMark ? ' · can giờ' : '') + ' · ' + CS_NAME[cs - 1];
       var gt = GOD_TRI[g] || ['', ''];
-      var badges = [];
-      if (voidPal[p]) badges.push('<span class="bdg void">Không vong</span>');
-      if (horsePal === p) badges.push('<span class="bdg">Mã tinh</span>');
-      var cellPats = pats.filter(function (x) { return x.宮 === p && (x.類 === '十干克應' ? CELL_KY[x.格] : !CELL_SKIP[x.格]); });
-      var cls = 'palace' + (o.值符落宮 === p ? ' is-fu' : '') + (o.值使落宮 === p ? ' is-shi' : '');
+      var st = STAR[s] || [s, ''], dr = DOOR[d] || [d, ''];
       var v = vig[p];
-      return '<div class="' + cls + '" aria-label="Cung ' + info.vi + ' ' + info.n + '">' +
-        '<div class="p-head"><span class="p-name">' + info.vi + ' ' + info.n + '<span class="han">' + p + '</span></span><span>' + info.dir + '</span></div>' +
-        '<div class="p-body"><div class="p-lines">' +
-          '<div class="ln"><span class="role">Thần</span><span class="vi">' + esc(GOD[g] || g) + '</span><span class="han">' + esc(g) + '</span>' +
-            (gt[0] ? '<span class="tri" title="Bản vị quẻ ' + gt[1] + '">' + gt[0] + '</span>' : '') +
-            (g === '值符' ? '<span class="tagmini gold">Trực phù</span>' : '') + '</div>' +
-          '<div class="ln ' + st[1] + '"><span class="role">Tinh</span><span class="vi">' + esc(st[0]) + '</span><span class="han">' + esc(s) + '</span></div>' +
-          '<div class="ln ' + dr[1] + '"><span class="role">Môn</span><span class="vi">' + esc(dr[0]) + '</span><span class="han">' + esc(d) + '</span>' +
-            (o.值使落宮 === p ? '<span class="tagmini red">Trị sử</span>' : '') +
-            (v ? '<span class="vig" title="Vượng suy của môn theo tiết">' + esc(VIGOR[v] || v) + '</span>' : '') + '</div>' +
-        '</div><div class="stems">' +
-          '<div class="' + skyCls + '" title="' + skyTitle + '"><span class="cs" title="' + CS_NAME[cs - 1] + '">' + cs + '</span>' + jiaMark + '<span class="g">' + esc(sky) + '</span>' + skyJi + '<small>' + (HV[sky] || '') + '</small></div>' +
-          '<div class="stem earth" title="Địa bàn ' + (HV[earth] || '') + '"><span class="g">' + esc(earth) + '</span>' + earthJi + '<small>' + (HV[earth] || '') + '</small></div>' +
-        '</div></div>' +
-        (cellPats.length ? '<div class="cellpats">' + cellPats.map(function (x) {
+      var cellPats = pats.filter(function (x) { return x.宮 === p && (x.類 === '十干克應' ? CELL_KY[x.格] : !CELL_SKIP[x.格]); });
+      return '<div class="qb-cell' + (o.值符落宮 === p ? ' fu' : '') + '" style="grid-area:' + AREA[p] + ';--ec:' + ec(p) + '" aria-label="Cung ' + PAL[p].vi + ' ' + PAL[p].n + '">' +
+        (gt[0] ? '<span class="qb-tri" title="' + esc(GOD[g] || g) + ' · quẻ ' + gt[1] + ' · số ' + gt[2] + '"><b>' + gt[2] + '</b>' + gt[0] + '</span>' : '') +
+        // cột can: thiên bàn trên, địa bàn dưới
+        '<div class="qb-stems">' +
+          '<div class="sky" title="' + tip + '"><span class="qb-stem' + ring + '">' + esc(sky) +
+            (o.值符落宮 === p ? '<span class="jia" title="Giáp ' + esc(o.旬首) + ' ẩn dưới ' + esc(hourYi) + '">甲</span>' : '') +
+            (jiSky === p ? '<span class="ji" title="Can Trung cung ký theo Thiên Nhuế">' + esc(o.地盤[4]) + '</span>' : '') +
+            '<span class="cs">' + cs + '</span></span><small>' + HV[sky] + '</small></div>' +
+          '<div class="earth" title="Địa bàn ' + HV[earth] + '"><span class="qb-stem">' + esc(earth) +
+            (p === '坤' ? '<span class="ji" title="Can Trung cung ký Khôn 2">' + esc(o.地盤[4]) + '</span>' : '') + '</span><small>' + HV[earth] + '</small></div>' +
+        '</div>' +
+        // hàng trên: tinh · thần
+        '<div class="qb-item ' + st[1] + '"><span class="role">Tinh</span><span class="vi"><span class="full">' + esc(st[0]) + '</span><span class="short">' + esc(st[0].replace('Thiên ', '')) + '</span></span><span class="hz">' + esc(s) + '</span></div>' +
+        '<div class="qb-item"><span class="role">Thần</span><span class="vi">' + esc(GOD[g] || g) + '</span><span class="hz">' + esc(g) + '</span></div>' +
+        // giữa: cách cục
+        '<div class="qb-mid">' + (cellPats.length ? '<div class="qb-pats">' + cellPats.map(function (x) {
           return '<span class="' + (x.吉凶 === '吉' ? 'good' : x.吉凶 === '凶' ? 'bad' : '') + '" title="' + esc(x.格) + '">' + esc(x.vi || PAT_VI[x.格] || hv(x.格) || x.格) + '</span>';
-        }).join('') + '</div>' : '') +
-        (badges.length ? '<div class="badges">' + badges.join('') + '</div>' : '') +
+        }).join('') + '</div>' : '') + '</div>' +
+        // hàng dưới: môn · phi tinh
+        '<div class="qb-item qb-door ' + dr[1] + '">' + (o.值使落宮 === p ? '<span class="trisu">Trị sử</span>' : '<span class="role">Môn</span>') +
+          '<span class="vi"><span class="full">' + esc(dr[0]) + '</span><span class="short">' + esc(dr[0].replace(' môn', '')) + '</span></span><span class="hz">' + esc(d) + '</span>' +
+          (v ? '<span class="vig" title="Vượng suy của môn theo tiết">' + esc(VIGOR[v] || v) + '</span>' : '') + '</div>' +
+        '<div class="qb-item qb-num" title="Cửu cung phi tinh"><span class="n">' + flyN[p] + '</span><small>' + PAL[p].vi + ' ' + PAL[p].n + '</small></div>' +
       '</div>';
-    }).join('');
+    }
+    $('board').innerHTML = '<div class="qb-ring" aria-hidden="true"></div>' +
+      lbl('cTL', '巽', 'ĐN') + lbl('tTon', '巽', '', false, true) + lbl('tLy', '離', 'N', false, true) + lbl('tKhon', '坤', '', false, true) + lbl('cTR', '坤', 'TN') +
+      lbl('lTon', '巽', '', true) + lbl('lChan', '震', 'Đ', true, true) + lbl('lCan', '艮', '', true) +
+      lbl('rKhon', '坤', '', true) + lbl('rDoai', '兌', 'T', true, true) + lbl('rKien', '乾', '', true) +
+      lbl('cBL', '艮', 'ĐB') + lbl('bCan', '艮', '', false, true) + lbl('bKham', '坎', 'B', false, true) + lbl('bKien', '乾', '', false, true) + lbl('cBR', '乾', 'TB') +
+      PALACES.map(cell).join('');
 
     // Patterns
     var main = pats.filter(function (p) { return p.類 !== '十干克應'; });
