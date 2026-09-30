@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<base href="/nap-tich-luy-test/">
+<meta name="robots" content="noindex, nofollow">
+<meta property="og:title" content="Sự kiện Nạp Tích Lũy">
+<meta property="og:description" content="Nạp tích lũy, chạm mốc nhận quà!">
+<meta property="og:image" content="https://newpage.vn/nap-tich-luy-test/og.jpg">
+<meta property="og:url" content="https://newpage.vn/nap-tich-luy-test/">
+<meta property="og:type" content="website">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+<meta name="screen-orientation" content="landscape">
+<meta name="x5-orientation" content="landscape">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#1b6fd8">
+<title>Sự kiện Nạp Tích Lũy</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="viewport">
+  <!-- lớp nền tràn viền cho màn hình khác tỉ lệ 2:1 -->
+  <div class="bleed" aria-hidden="true"><img src="assets/bg-lobby.webp" alt=""></div>
+
+  <main id="stage" aria-label="Sự kiện Nạp tích lũy">
+
+    <!-- sub-text 5:212 -->
+    <div class="subtitle">
+      <img class="w-l1" src="assets/subtitle-wing-l1.svg" alt="">
+      <img class="w-l2" src="assets/subtitle-wing-l2.svg" alt="">
+      <img class="w-r1" src="assets/subtitle-wing-r1.svg" alt="">
+      <img class="w-r2" src="assets/subtitle-wing-r2.svg" alt="">
+      <p class="subtitle-text">Nạp tích lũy, chạm mốc nhận quà!</p>
+    </div>
+
+    <!-- text-frame 5:13 — khung (3 mảnh sprite + inner shadow + glow cyan) đã bake sẵn thành 1 ảnh @2x
+         để hiển thị giống nhau trên mọi WebView (Safari không render đúng mask + drop-shadow) -->
+    <img class="title-bg" src="assets/title-frame-baked.webp" alt="" width="1046" height="234">
+    <h1 class="title-text">
+      <span class="t-small">Sự kiện</span>
+      <span class="t-big">NẠP TÍCH LŨY</span>
+    </h1>
+
+    <!-- countdown 5:88 -->
+    <div class="countdown-wrap">
+      <div class="countdown">
+        <img class="countdown-bg" src="assets/countdown.webp" alt="">
+        <div class="countdown-body">
+          <img src="assets/icon-hourglass.svg" alt="" width="32" height="32">
+          <p class="countdown-text"><span class="c1">Còn</span><span class="c2"> </span><span class="c3" id="countdown-value">8d 22h</span></p>
+        </div>
+      </div>
+    </div>
+
+    <!-- CH_BlackPudding 1:9 -->
+    <div class="char char-blackpudding" aria-hidden="true"><div class="char-rot"><div class="char-anim"><img src="assets/ch-blackpudding.webp" alt=""></div></div></div>
+
+    <!-- Ellipse glow 7:251 -->
+    <div class="glow" aria-hidden="true"><img src="assets/glow-ellipse.svg" alt=""></div>
+
+    <!-- level cards 5:115 (thứ tự vẽ: 4 → 0) -->
+    <section class="levels" aria-label="Các mốc nạp">
+      <!-- level-4 7:164 -->
+      <article class="level level-4" data-level="4">
+        <div class="card-shape"><img src="assets/card-4.svg" alt=""></div>
+        <img class="halftone" src="assets/halftone-4.png" alt="" width="459" height="467">
+        <svg class="shimmer" viewBox="0 0 459 467" width="459" height="467" aria-hidden="true">
+          <defs><clipPath id="clip-l4"><path d="M459 0H134.03L0 467H329.757L459 0Z"/></clipPath></defs>
+          <g clip-path="url(#clip-l4)"><path class="stripe" d="M480 -8L166 490H248.006L565.5 -8H480Z" fill="#fff"/></g>
+        </svg>
+        <div class="status" style="left:161px;top:386px"></div>
+        <img class="tab" src="assets/tab-4.svg" alt="">
+        <h2 class="lv-name">Level 4</h2>
+        <p class="lv-price">250.000đ</p>
+        <div class="crown"><img src="assets/crown.png" alt=""></div>
+        <div class="item i4-coin"><div class="crop"><img src="assets/item-coin-stack.webp" alt=""></div></div>
+        <p class="qty" style="left:185px;top:233px">x5000</p>
+        <div class="item i4-ticket"><img src="assets/item-ticket.webp" alt=""></div>
+        <p class="qty" style="left:210.52px;top:328.52px">x500</p>
+        <div class="item i4-box"><div class="crop"><img src="assets/item-box-w.webp" alt=""></div></div>
+        <p class="qty" style="left:312.02px;top:274.18px">x4</p>
+      </article>
+
+      <!-- level-3 7:124 -->
+      <article class="level level-3" data-level="3">
+        <div class="card-shape"><img src="assets/card-3.svg" alt=""></div>
+        <img class="halftone" src="assets/halftone-3.png" alt="" width="432" height="434">
+        <svg class="shimmer" viewBox="0 0 432 434" width="432" height="434" aria-hidden="true">
+          <defs><clipPath id="clip-l3"><path d="M432 0H124.719L0 434H306.848L432 0Z"/></clipPath></defs>
+          <g clip-path="url(#clip-l3)"><path class="stripe" d="M248.3 -100L-246.6 500H-168.6L319.8 -100H248.3Z" fill="#fff"/></g>
+        </svg>
+        <img class="tab" src="assets/tab-3.svg" alt="">
+        <h2 class="lv-name">Level 3</h2>
+        <p class="lv-price">180.000đ</p>
+        <div class="status" style="left:150px;top:350px"></div>
+        <div class="item i3-card"><img src="assets/item-card-pink.webp" alt=""></div>
+        <p class="qty" style="left:167px;top:233px">x3</p>
+        <div class="item i3-ticket"><img src="assets/item-ticket.webp" alt=""></div>
+        <p class="qty" style="left:260.5px;top:293px">x300</p>
+      </article>
+
+      <!-- level-2 6:73 -->
+      <article class="level level-2" data-level="2">
+        <div class="card-shape"><img src="assets/card-2.svg" alt=""></div>
+        <img class="halftone" src="assets/halftone-2.png" alt="" width="406" height="408">
+        <img class="tab" src="assets/tab-2.svg" alt="">
+        <h2 class="lv-name">Level 2</h2>
+        <p class="lv-price">100.000đ</p>
+        <div class="item i2-ticket"><img src="assets/item-ticket.webp" alt=""></div>
+        <p class="qty" style="left:256.5px;top:271px">x200</p>
+        <div class="item i2-cards"><div class="crop"><img src="assets/item-cookie-cards.webp" alt=""></div></div>
+        <p class="qty" style="left:168.82px;top:192.36px">x4</p>
+      </article>
+
+      <!-- level-1 6:41 -->
+      <article class="level level-1" data-level="1">
+        <div class="card-shape"><img src="assets/card-1.svg" alt=""></div>
+        <img class="halftone" src="assets/halftone-1.png" alt="" width="378" height="380">
+        <img class="tab" src="assets/tab-1.svg" alt="">
+        <h2 class="lv-name">Level 1</h2>
+        <p class="lv-price">20.000đ</p>
+        <div class="item i1-coin"><div class="crop"><img src="assets/item-coin-stack.webp" alt=""></div></div>
+        <p class="qty" style="left:162px;top:186px">x3000</p>
+        <div class="item i1-gems"><img src="assets/item-gems.webp" alt=""></div>
+        <p class="qty" style="left:214.5px;top:258px">x100</p>
+        <div class="status" style="left:114px;top:302px"></div>
+      </article>
+
+      <!-- level-0 5:252 -->
+      <article class="level level-0" data-level="0">
+        <div class="card-shape"><img src="assets/card-0.svg" alt=""></div>
+        <img class="halftone" src="assets/halftone-0.png" alt="" width="346" height="347">
+        <img class="tab" src="assets/tab-0.svg" alt="">
+        <h2 class="lv-name">Level 0</h2>
+        <div class="item i0-coin"><img src="assets/item-coin-single.webp" alt=""></div>
+        <p class="qty" style="left:161px;top:194px">x500</p>
+        <p class="lv-price">0đ</p>
+        <div class="status" style="left:101px;top:274px"></div>
+      </article>
+
+      <!-- btn-claim 7:114 — trong Figma nằm ở group level-1 nhưng là CTA của level 2 -->
+      <button class="btn-claim" type="button" data-claim="2">
+        <span class="bg"><img src="assets/btn-claim-bg.svg" alt=""></span>
+        <img class="shine" src="assets/btn-claim-shine.svg" alt="">
+        <span class="label">Mở khóa</span>
+      </button>
+    </section>
+
+    <!-- CH_Icepop 1:7 -->
+    <div class="char char-icepop" aria-hidden="true"><div class="char-rot"><div class="char-anim"><img src="assets/ch-icepop.webp" alt=""></div></div></div>
+
+    <!-- progress-bar 5:208 -->
+    <div class="progress" role="progressbar" aria-valuemin="0" aria-valuemax="250000" aria-valuenow="100000" aria-label="Tiến độ nạp tích lũy">
+      <div class="progress-line"><div class="progress-fill" id="progress-fill"></div></div>
+      <div class="node status" data-node="0" style="left:0"></div>
+      <div class="node status" data-node="1" style="left:214px"></div>
+      <div class="node status" data-node="3" style="left:827px"></div>
+      <div class="node status" data-node="4" style="left:1168px"></div>
+      <div class="node current" style="left:497px"><img class="glow" src="assets/current-level-glow.svg" alt=""><img class="dot" src="assets/current-level-dot.svg" alt=""></div>
+    </div>
+
+    <!-- CH_FruitPunch 1:6 -->
+    <div class="char char-fruitpunch" aria-hidden="true"><div class="char-rot"><div class="char-anim"><img src="assets/ch-fruitpunch.webp" alt=""></div></div></div>
+    <!-- CH_BaconRoll 1:8 -->
+    <div class="char char-baconroll" aria-hidden="true"><div class="char-rot"><div class="char-anim"><img src="assets/ch-baconroll.webp" alt=""></div></div></div>
+
+    <!-- btn-group 2:80 -->
+    <nav class="btn-group">
+      <button class="btn-top" type="button" id="btn-rules">
+        <span class="icon icon-rules"><img src="assets/icon-rules.svg" alt=""></span>
+        <span class="label">Thể lệ</span>
+      </button>
+      <button class="btn-top" type="button" id="btn-history">
+        <span class="icon icon-history"><img src="assets/icon-history.svg" alt=""></span>
+        <span class="label">Lịch sử nhận quà</span>
+      </button>
+    </nav>
+
+    <p class="footnote">*Phần thưởng sẽ được gửi vào <b>HỘP THƯ</b></p>
+  </main>
+</div>
+<script src="main.js"></script>
+</body>
+</html>
