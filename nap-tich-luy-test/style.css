@@ -169,6 +169,10 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 
 /* ---------- levels ---------- */
 .levels { left: 0; top: 0; width: 2000px; height: 1000px; pointer-events: none; }
+/* Mobile/tablet (cảm ứng): phóng cụm 5 card lên 8% quanh tâm cụm cho dễ nhìn.
+   Tâm (1005,578) = giữa card Level 0 (x191) → Level 4 (x1820), y345 → 812.
+   Sau scale: đỉnh ~326 (subtitle kết thúc 316), đáy ~831 (progress bắt đầu 851) → không chồng. */
+@media (pointer: coarse) { .levels { transform: scale(1.08); transform-origin: 1005px 578px; } }
 .levels > * { position: absolute; }
 .level > * { position: absolute; }
 .level-4 { left: 1361px; top: 345px; width: 459px; height: 467px; }
@@ -188,7 +192,7 @@ button { font: inherit; color: inherit; background: none; border: 0; cursor: poi
 /* Shimmer: quét qua card linear nhanh (~1.5s), rồi ở ngoài khung ~1.9s cho khoảng thở, lặp lại.
    2 card cùng quãng đường 1000px + cùng nhịp → tốc độ đều nhau. */
 .shimmer { overflow: hidden; pointer-events: none; opacity: .9; }
-.level-3 .shimmer { opacity: .6; }  /* phân cấp: Level 3 nhẹ hơn Level 4 */
+.level-3 .shimmer { opacity: .3; }  /* phân cấp: Level 3 nhẹ hơn Level 4 */
 .shimmer .stripe { animation: 3.4s linear infinite; }
 .level-4 .shimmer .stripe { animation-name: shimmer-l4; }
 .level-3 .shimmer .stripe { animation-name: shimmer-l3; }
